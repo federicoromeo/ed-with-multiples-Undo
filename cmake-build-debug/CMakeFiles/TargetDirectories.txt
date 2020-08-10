@@ -1,0 +1,3 @@
+C:/Users/feder/CLionProjects/ed-con-Undo-multipli/cmake-build-debug/CMakeFiles/main.c.dir
+C:/Users/feder/CLionProjects/ed-con-Undo-multipli/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/feder/CLionProjects/ed-con-Undo-multipli/cmake-build-debug/CMakeFiles/rebuild_cache.dir
