@@ -1,10 +1,11 @@
-3u
-4r
 1,2c
 ciao1
 ciao2
+.
 3,5d
 ciao3
 ciao4
 ciao5
+.
+1,5p
 q
