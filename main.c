@@ -253,7 +253,6 @@ int main(){
                             splitted_line[strlen(splitted_line)-1] = '\0';
                             ind2 = (int) strtol(splitted_line, (char **)NULL, 10);
                             //ind2 = atoi(splitted_line);
-
                             splitted_line = strtok(NULL, ",");
                             break;
                         }
@@ -261,17 +260,29 @@ int main(){
                     }
                 }
 
-                delta = ind2 - ind1 +1;
-
-                while(delta>0){
-                    fscanf(fp, "%s", line);
-                    printf("NEW LINE: ");
-                    puts(line);
-                    delta--;
-                }
+                int ind1_aux = ind1 + 1;
+                delta = ind2 - ind1 + 1;
 
                 //DELETE:
 
+                if(ind1==0 && ind2==0){
+                    break;
+                }
+
+                if(tree_search(tree->root,ind1)!=nil) {
+                    while (delta > 0) {
+                        RB_delete(&tree->root,tree_search(tree->root,ind1));
+                        delta--;
+                        ind1_aux = ind1+1;
+                        node* node_to_decrement = tree_search(tree->root,ind1_aux);
+                        while(node_to_decrement!=nil){
+                            node_to_decrement->id--;
+                            ind1_aux++;
+                            node_to_decrement = tree_search(tree->root,ind1_aux);  //oppure cerco il next
+                        }
+                        //ind1++;
+                    }
+                }
 
                 break;
             }
@@ -311,7 +322,7 @@ int main(){
                     //puts("\n");
 
                 // PRINT
-                puts("inorder print:\n");
+                puts("\ninorder print:");
                 in_order_walk(tree->root);
                 print_delta(tree->root,ind1,ind2,out);
 
