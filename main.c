@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-//#define fp stdin
-//#define out stdout
+#define fp stdin
+#define out stdout
 
 struct node {
     char color;
@@ -56,7 +56,7 @@ void RB_delete(node **T_root, node *z);
 void RB_delete_fixup(node **T_root, node *x);
 void empty_tree(node **T_root);
 //TREE mine
-void print_delta(node *T_root, int ind1, int ind2, FILE* out);
+void print_delta(node *T_root, int ind1, int ind2/*, FILE* out*/);
 int count_nodes(node *root);
 node *tree_search(node* x, int id);
 void print2DUtil(node *root, int space);
@@ -100,8 +100,8 @@ int main(){
 
     //for testing
     char* line = NULL; size_t len = 1024;
-    FILE *fp = fopen("C:/Users/feder/CLionProjects/ed-con-Undo-multipli/test.txt","r");
-    FILE* out = fopen("out.txt","w");
+    //FILE *fp = fopen("C:/Users/feder/CLionProjects/ed-con-Undo-multipli/test.txt","r");
+    //FILE* out = fopen("out.txt","w");
     if(fp==NULL){
         printf("Error opening file");
         exit(0);
@@ -385,7 +385,7 @@ int main(){
                 //in_order_walk(tree->root);
 
                 //PRIMA: print_delta(tree->root,ind1,ind2/*,out*/);
-                print_delta(curr->root,ind1,ind2,out);
+                print_delta(curr->root,ind1,ind2/*,out*/);
 
                 break;
             }
@@ -506,7 +506,7 @@ list_node* insert_in_list(node* tree_node_root, list_node* ptr_to_the_last_list_
     return t;
 }
 
-void print_delta(node *T_root, int ind1, int ind2, FILE* out){
+void print_delta(node *T_root, int ind1, int ind2/*, FILE* out*/){
     int delta = ind2 - ind1 + 1;
     while(delta>0) {
         if(tree_search(T_root, ind1)!=nil) {
