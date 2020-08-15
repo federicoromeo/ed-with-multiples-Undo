@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define fp stdin
+//#define fp stdin
 #define out stdout
 
 struct node {
@@ -32,15 +32,6 @@ struct list_node {
 typedef struct list_node list_node;
 
 
-//STACK
-//stack_node* create_stack(int capacity);
-//stack_node* new_node(char* command, char* texts);
-//int peek(stack_node* root);
-//void pop(stack_node** root);
-//stack_node* push(stack_node** root, char* command, char* text);
-//int is_empty(stack_node* root);
-//void append(stack_node* this_stack_node, char* line);
-//void print_inorder_stack(stack_node* root);
 
 //PROTOTYPES
 
@@ -75,32 +66,15 @@ int main(){
     nil->p = nil;
     nil->color = 'b';
 
-
-    // Creation of the editor tree
-    /*
-     * tree* tree = malloc(sizeof(struct tree*));
-    if(!tree){
-        fprintf(stderr,"\nError tree\n");
-        exit(0);
-    }
-    tree->nil = nil; //boh
-    tree->root = nil;
-     */
-
     // Pointer at the current node of the linked list containing the roots of the successives modified trees
     list_node* curr = (list_node*)malloc(sizeof(list_node));
     curr->root = nil;
-
-    // Pointer at the LAST node of the linked list containing the roots of the successives modified trees
-    // use this to increment list
-    list_node* list_node_root = (list_node*)malloc(sizeof(list_node));
-    list_node_root->prev = NULL;
-    list_node_root->next = NULL;
-    list_node_root->root = NULL;
+    curr->next = NULL;
+    curr->prev = NULL;
 
     //for testing
     char* line = NULL; size_t len = 1024;
-    //FILE *fp = fopen("C:/Users/feder/CLionProjects/ed-con-Undo-multipli/test.txt","r");
+    FILE *fp = fopen("C:/Users/feder/CLionProjects/ed-con-Undo-multipli/test.txt","r");
     //FILE* out = fopen("out.txt","w");
     if(fp==NULL){
         printf("Error opening file");
@@ -113,36 +87,7 @@ int main(){
 
     while(chars!=-1) {
 
-        /*size_t len = sizeof(chunk);
-        char* line = malloc(len);
-        if(line==NULL)
-            exit(0);
-        line[0] = '\0';
-
-        fgets(chunk,sizeof(chunk),fp);
-        if(len-strlen(line) < sizeof(chunk)){
-            len*=2;
-            if((line = realloc(line,len)) == NULL){
-                free(line);
-                exit(0);
-            }
-        }
-        strcat(line,chunk);
-
-        if(line[strlen(line)-1] == '\n'){
-            full_line = line;
-            line[0] = '\0';
-        }*/
-
-        //fgets(line, 1024, stdin);
-
-        //tolgo il \n
         line[strcspn(line, "\n\r")] = '\0';
-        /*if ((line)[chars - 1] == '\n') {
-            (line)[chars - 1] = '\0';
-            --chars;
-        }*/
-
         command = line[strlen(line)-1];
 
         switch(command){
@@ -176,50 +121,13 @@ int main(){
                     fprintf(stderr,"\nError tree\n");
                     exit(0);
                 }
-                new_tree->nil = nil; //boh
-                new_tree->root = curr->root;
-
                 // Copy the old tree
-                /*if(curr->root!=nil){
-                    new_tree->root = curr->root;        //old head by reference
-                    while(tree_search(curr->root,ind1)!=nil){
-
-                    }
-                }*/
-
-                /*char* splitted_line = strtok(line, ",");
-                while( splitted_line != NULL ) {
-                    int j = 1;
-                    for (int k=0; k<=strlen(splitted_line); k++) {
-                        if(j==1){
-                            // Get the first address
-                            ind1 = (int) strtol(splitted_line, (char **)NULL, 10);
-                            //ind1 = atoi(splitted_line);
-                            splitted_line = strtok(NULL, ",");
-                        }
-                        else if(j==2){
-                            // Get the second address by removing the last character (the command)
-                            splitted_line[strlen(splitted_line)-1] = '\0';
-                            ind2 = (int) strtol(splitted_line, (char **)NULL, 10);
-                            //ind2 = atoi(splitted_line);
-                            splitted_line = strtok(NULL, ",");
-                            break;
-                        }
-                        j++;
-                    }
-                }
-                */
-
-                //CHANGE:
-                /*
-                 *** se l'albero è vuoto E ind1=1:
-                 *      RB_insert
-                 *** else se ind1 è presente (cioe ind1<=count_nodes(tree))
-                 *      change_text fino a che sono dentro e RB_insert quando non esiste piu il nodo
-                 *
-                 *** else se ind1==count_node(tree)+1
-                 *       RB_insert normale
-                */
+                new_tree->root = (node*)malloc(sizeof(node));
+                new_tree->root->p = curr->root->p;
+                new_tree->root->left = curr->root->left;
+                new_tree->root->right = curr->root->right;
+                new_tree->root->id = curr->root->id;
+                new_tree->root->text = curr->root->text;
 
                 node* this_node = tree_search(new_tree->root,ind1);
 
@@ -229,12 +137,10 @@ int main(){
                     while(delta>0){
 
                         getline(&line,&len,fp);
-                        //fgets(line, 1024, stdin);
                         line[strcspn(line, "\n")] = '\0';
-                        //line[strlen(line)-1] = '\0';
 
-                        node* x = (node*)malloc((strlen(line)+1)*sizeof(node));
-                        x->text = malloc((strlen(line)+1)*(sizeof(char*)));
+                        node* x = (node*)malloc(sizeof(node));
+                        x->text = malloc((strlen(line)+1)*(sizeof(char)));
                         x->id = ind1;
                         strcpy(x->text,line);
                         x->right=x->left=x->p=nil;
@@ -243,7 +149,7 @@ int main(){
                         ind1++;
                     }
                 }
-                //se ind1 è presente
+                    //se ind1 è presente
                 else if(tree_search(new_tree->root,ind1)!=nil && ind1<=count_nodes(new_tree->root)) {
                     actual_id = ind1;
                     while (delta > 0) {
@@ -257,15 +163,15 @@ int main(){
                             node* that_node_to_modify = tree_search(new_tree->root,ind1);
                             free(that_node_to_modify->text);
 
-                            that_node_to_modify->text = malloc((strlen(line)+1)*(sizeof(char*)));
+                            that_node_to_modify->text = (char*) malloc((strlen(line)+1)*(sizeof(char)));
                             strcpy(that_node_to_modify->text, line);
                             delta--;
                             ind1++;
                             actual_id = ind1;
                         }
                         else{
-                            node* x = (node*)malloc((strlen(line)+1)*sizeof(node));
-                            x->text = malloc((strlen(line)+1)*(sizeof(char*)));
+                            node* x = (node*)malloc(sizeof(node));
+                            x->text = (char*) malloc((strlen(line)+1)*(sizeof(char)));
                             x->id = actual_id;
                             strcpy(x->text,line);
                             x->right=x->left=x->p=nil;
@@ -276,18 +182,16 @@ int main(){
                         }
                     }
                 }
-                //altrimenti se non c'è proprio
+                    //altrimenti se non c'è proprio
                 else if(ind1==count_nodes(new_tree->root)+1){
                     while (delta > 0) {
 
                         actual_id = ind1;
                         getline(&line,&len,fp);
-                        //fgets(line, 1024, stdin);
                         line[strcspn(line, "\n")] = '\0';
-                        //fscanf(fp, "%s", line);
 
-                        node *x = (node *) malloc((strlen(line) + 1) * sizeof(node));
-                        x->text = malloc((strlen(line) + 1) * (sizeof(char *)));
+                        node *x = (node *) malloc(sizeof(node));
+                        x->text = (char*)malloc((strlen(line) + 1) * (sizeof(char)));
                         x->id = actual_id;
                         strcpy(x->text, line);
                         x->right = x->left = x->p = nil;
@@ -299,7 +203,13 @@ int main(){
                 }
 
                 // List handling
-                curr = insert_in_list(new_tree->root,list_node_root);
+                insert_in_list(new_tree->root,curr);
+
+                while(curr->next!=NULL){
+                    curr = curr->next;
+                }
+
+                //in_order_walk(curr->root);
 
                 break;
             }
@@ -325,8 +235,13 @@ int main(){
                     fprintf(stderr,"\nError tree\n");
                     exit(0);
                 }
-                new_tree->nil = nil; //boh
-                new_tree->root = curr->root;
+                // Copy the old tree
+                new_tree->root = (node*)malloc(sizeof(node));
+                new_tree->root->p = curr->root->p;
+                new_tree->root->left = curr->root->left;
+                new_tree->root->right = curr->root->right;
+                new_tree->root->id = curr->root->id;
+                new_tree->root->text = curr->root->text;
 
                 //DELETE:
 
@@ -339,7 +254,8 @@ int main(){
 
                 if(this_node!=nil) {
                     while (delta > 0) {
-                        RB_delete(&new_tree->root,tree_search(new_tree->root,ind1));
+                        this_node = tree_search(new_tree->root,ind1);
+                        RB_delete(&new_tree->root,this_node);
                         delta--;
                         ind1_aux = ind1+1;
                         node* node_to_decrement = tree_search(new_tree->root,ind1_aux);
@@ -353,8 +269,11 @@ int main(){
                 }
 
                 // List handling
-                curr = insert_in_list(new_tree->root,list_node_root);
+                insert_in_list(new_tree->root,curr);
 
+                while(curr->next!=NULL){
+                    curr = curr->next;
+                }
                 break;
             }
 
@@ -367,7 +286,6 @@ int main(){
                     splitted_line = strtok (NULL, ",");
                     i++;
                 }
-
                 ind1 = ind[0];
                 ind2 = ind[1];
 
@@ -376,9 +294,9 @@ int main(){
                     break;
                 }
                 // GRAPHIC
-                    //puts("2D representation:\n");
-                    //print2DUtil(curr->root, 0);
-                    //puts("\n");
+                //puts("2D representation:\n");
+                //print2DUtil(curr->root, 0);
+                //puts("\n");
 
                 // PRINT
                 //puts("\ninorder print:");
@@ -397,18 +315,19 @@ int main(){
                 times = (int) strtol(line, (char **)NULL, 10);                //times = atoi(line);
 
                 while(times>0){
-
+                    curr = curr->prev;
                     times--;
                 }
                 break;
             }
 
             case 'r':{
+
                 // Get the number of redo times by removing the last character (the command)
                 line[strlen(line)-1] = '\0';
                 times = (int) strtol(line, (char **)NULL, 10);                //times = atoi(line);
                 while(times>0){
-
+                    curr = curr->next;
                     times--;
                 }
                 break;
@@ -501,6 +420,7 @@ list_node* insert_in_list(node* tree_node_root, list_node* ptr_to_the_last_list_
         temp = temp->next;
 
     temp->next = t;
+    t->prev = temp;
     t->next = NULL;
 
     return t;
@@ -545,14 +465,14 @@ void print2DUtil(node *root, int space) {
     printf("\n");
     for (int i = 10; i < space; i++)
         printf(" ");
-    printf("%d\n", root->id);
+    printf("%d - %s\n", root->id, root->text);
 
     // Process left child
     print2DUtil(root->left, space);
 }
 
 void in_order_walk(node *T_root) {
-    if (T_root != nil) {
+    if (T_root != nil && T_root->id>0) {
         in_order_walk(T_root->left);
         printf("%d",T_root->id);
         printf(" - ");
@@ -584,7 +504,7 @@ node *tree_search(node* x, int id){
 int count_nodes(node *root) {
     int count = 1;
     if (root->left != nil) {
-        count += count_nodes(root->left);
+        count += count_nodes(root->left );
     }
     if (root->right != nil) {
         count += count_nodes(root->right);
@@ -779,7 +699,7 @@ void RB_delete(node **T_root, node *z) {
         if (y != z) {
             y = z;
         }
-        free(y->id);
+        //free(y->id);
         free(y);
     }
 }
