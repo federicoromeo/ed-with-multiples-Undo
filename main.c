@@ -15,13 +15,13 @@ struct node {
 };
 typedef struct node node;
 
+node* nil;
+
 struct tree {
     node *root;   //testa
     node *nil;
 };
 typedef struct tree tree;
-
-node* nil;
 
 
 struct list_node {
@@ -43,6 +43,7 @@ void RB_insert(node **T_root, node *z);
 void RB_insert_fixup(node **T_root, node *z);
 void RB_transplant(node **T_root, node *u, node *v);
 node *RB_minimum(node *T_root);
+node *RB_maximum(node *T_root);
 void RB_delete(node **T_root, node *z);
 void RB_delete_fixup(node **T_root, node *x);
 void empty_tree(node **T_root);
@@ -51,6 +52,7 @@ void print_delta(node *T_root, int ind1, int ind2/*, FILE* out*/);
 int count_nodes(node *root);
 node *tree_search(node* x, int id);
 void print2DUtil(node *root, int space);
+struct node* in_order_successor(node* n);
 //LINKED LIST
 list_node* insert_in_list(node* tree_node_root, list_node* ptr_to_the_last_list_node);
 
@@ -64,6 +66,7 @@ int main(){
     nil->left = nil;
     nil->right = nil;
     nil->p = nil;
+    nil->id = -1;
     nil->color = 'b';
 
     // Pointer at the current node of the linked list containing the roots of the successives modified trees
@@ -122,6 +125,7 @@ int main(){
                     exit(0);
                 }
                 // Copy the old tree
+
                 new_tree->root = (node*)malloc(sizeof(node));
                 new_tree->root->p = curr->root->p;
                 new_tree->root->left = curr->root->left;
@@ -140,7 +144,7 @@ int main(){
                         line[strcspn(line, "\n")] = '\0';
 
                         node* x = (node*)malloc(sizeof(node));
-                        x->text = malloc((strlen(line)+1)*(sizeof(char)));
+                        x->text = malloc((strlen(line)+1)*sizeof(char));
                         x->id = ind1;
                         strcpy(x->text,line);
                         x->right=x->left=x->p=nil;
@@ -150,7 +154,7 @@ int main(){
                     }
                 }
                     //se ind1 è presente
-                else if(tree_search(new_tree->root,ind1)!=nil && ind1<=count_nodes(new_tree->root)) {
+                else if(this_node!=nil && ind1<=count_nodes(new_tree->root)) {
                     actual_id = ind1;
                     while (delta > 0) {
 
@@ -160,18 +164,35 @@ int main(){
 
                         //ottimizzaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
                         if(tree_search(new_tree->root,ind1)!=nil) {
+
                             node* that_node_to_modify = tree_search(new_tree->root,ind1);
+
+                            //ottimizzaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+                            // QUI
+                            // copio tutti i nodi fino a arrivare a quelli da modificare partendo dalla root
+                            node* x = (node*)malloc(sizeof(node));
+                            x->text = (char*) malloc((strlen(line)+1)*sizeof(char));
+                            x->id = that_node_to_modify->id;
+                            strcpy(x->text,line);
+                            x->right = that_node_to_modify->right;
+                            x->left = that_node_to_modify->left;
+                            x->p = that_node_to_modify->p;
+                            in_order_successor(that_node_to_modify->p,x);
+                            //RB_insert(&new_tree->root,x);
+
+/*                            node* that_node_to_modify = tree_search(new_tree->root,ind1);
                             free(that_node_to_modify->text);
 
                             that_node_to_modify->text = (char*) malloc((strlen(line)+1)*(sizeof(char)));
                             strcpy(that_node_to_modify->text, line);
-                            delta--;
+*/                       delta--;
                             ind1++;
                             actual_id = ind1;
                         }
                         else{
                             node* x = (node*)malloc(sizeof(node));
-                            x->text = (char*) malloc((strlen(line)+1)*(sizeof(char)));
+                            x->text = (char*) malloc((strlen(line)+1)*sizeof(char));
                             x->id = actual_id;
                             strcpy(x->text,line);
                             x->right=x->left=x->p=nil;
@@ -400,6 +421,31 @@ int peek(stack_node* root){
 
 
 //IMPLEMENTATIONS
+
+struct node* in_order_successor(node* n){
+    if (n->right != nil)
+        return RB_minimum(n->right);
+
+    node* p = n->p;
+    while (p != nil && n == p->right) {
+        n = p;
+        p = p->p;
+    }
+    return p;
+}
+
+struct node* in_order_predecessor(node* n){
+    // ?
+    if (n->left != nil)
+        return RB_maximum(n->left);
+
+    node* p = n->p;
+    while (p != nil && n == p->right) {
+        n = p;
+        p = p->p;
+    }
+    return p;
+}
 
 list_node* insert_in_list(node* tree_node_root, list_node* ptr_to_the_last_list_node) {
 
@@ -662,6 +708,13 @@ void RB_transplant(node **T_root, node *u, node *v) {
 node *RB_minimum(node *T_root) {
     while(T_root->left != nil) {
         T_root = T_root->left;
+    }
+    return T_root;
+}
+
+node *RB_maximum(node *T_root) {
+    while(T_root->right != nil) {
+        T_root = T_root->right;
     }
     return T_root;
 }
