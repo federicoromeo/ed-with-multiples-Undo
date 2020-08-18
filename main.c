@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-//#define fp stdin
+#define fp stdin
 #define out stdout
 
 struct node {
@@ -77,7 +77,7 @@ int main(){
 
     //for testing
     char* line = NULL; size_t len = 1024;
-    FILE *fp = fopen("C:/Users/feder/CLionProjects/ed-con-Undo-multipli/test.txt","r");
+    //FILE *fp = fopen("C:/Users/feder/CLionProjects/ed-con-Undo-multipli/test.txt","r");
     //FILE* out = fopen("out.txt","w");
     if(fp==NULL){
         printf("Error opening file");
