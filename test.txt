@@ -1,82 +1,44 @@
 1,2c
-9. It is better to have 100 functions operate on one data structure than 10 functions on 10 data structures.
-10. Get into a rut early: Do the same process the same way. Accumulate idioms. Standardize. The only difference(!) between Shakespeare and you was the size of his idiom list - not the size of his vocabulary.
+110. Editing is a rewording activity.
+81. In computing, turning the obvious into the useful is a living definition of the word "frustration".
 .
 1,10p
 1,2c
-106. It's difficult to extract sense from strings, but they're the only communication coin we can count on.
-104. The proof of a system's value is its existence.
-.
-1,1c
-89. One does not learn computing by using a hand calculator, but one can forget arithmetic.
-.
-1,10p
-1,1c
-4. Every program is a part of some other program and rarely fits.
-.
-1,1c
-24. Perhaps if we wrote programs from childhood on, as adults we'd be able to read them.
-.
-1,10p
-1,2c
-111. Why did the Roman Empire collapse? What is Latin for office automation?
-16. Every program has (at least) two purposes: the one for which it was written, and another for which it wasn't.
+23. To understand a program you must become both the machine and the program.
+71. Documentation is like term insurance: It satisfies because almost no one who subscribes to it depends on its benefits.
 .
 1,2c
-109. Think of it! With VLSI we can pack 100 ENIACS in 1 sq. cm.
-91. The computer reminds one of Lon Chaney -- it is the machine of a thousand faces.
+83. What is the difference between a Turing machine and the modern computer?  It's the same as that between Hillary's ascent of Everest and the establishment of a Hilton hotel on its peak.
+66. Making something variable is easy. Controlling duration of constancy is the trick.
 .
+1,10p
+1,1c
+58. Fools ignore complexity. Pragmatists suffer it. Some can avoid it. Geniuses remove it.
+.
+1,1c
+58. Fools ignore complexity. Pragmatists suffer it. Some can avoid it. Geniuses remove it.
+.
+1,2d
 1,10p
 1,2c
-100. We will never run out of things to program as long as there is a single program around.
-21. Optimization hinders evolution.
+96. Computers don't introduce order anywhere as much as they expose opportunities.
+98. In computing, the mean time to failure keeps getting shorter.
 .
-1,1c
-36. The use of a program to prove the 4-color theorem will not change mathematics - it merely demonstrates that the theorem, a challenge for a century, is probably not important to mathematics.
-.
-1,10p
-1,1c
-86. We kid ourselves if we think that the ratio of procedure to  data  in an active data-base system can be made arbitrarily small or even kept small.
-.
-1,1d
-1,10p
 1,2c
-75. Because of its vitality, the computing field is always in desperate need of new cliches: Banality soothes our nerves.
-8. A programming language is low level when its programs require attention to the irrelevant.
+34. The string is a stark data structure and everywhere it is passed there is much duplication of process. It is a perfect vehicle for hiding information.
+94. Interfaces keep things tidy, but don't accelerate growth: Functions do.
 .
-1,1c
+1,10p
+1,2d
+1,2c
+107. The debate rages on: is PL/I Bachtrian or Dromedary?
 72. An adequate bootstrap is a contradiction in terms.
 .
-1,10p
-1,1d
-1,1c
-108. Whenever two programmers meet to criticize their programs, both are silent.
-.
-1,10p
-1,1c
-117. It goes against the grain of modern education to teach children to program. What fun is there in making plans, acquiring discipline in organizing  thoughts,  devoting attention to detail and learning to be self-critical?
-.
-1,1d
-1,10p
-1,1c
-59. In English every word can be verbed. Would that it were so in our programming languages.
-.
-1,2d
-1,10p
-1,2d
-10r
-1,10p
-9r
-6u
-1,10p
-5u
-9u
-1,10p
-3r
-8r
-1,10p
-7u
-7r
+1u
 1,10p
 5r
+1u
+1,10p
+3u
+4r
 q

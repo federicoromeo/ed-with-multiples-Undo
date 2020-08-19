@@ -1,100 +1,327 @@
-89. One does not learn computing by using a hand calculator, but one can forget arithmetic.
-30. In programming, everything we do is a special case of something more general -- and often we know it too quickly.
-.
-.
-.
-.
-.
-.
-.
-.
-88. It is not the computer's fault that Maxwell's equations are not adequate to design the electric motor.
-100. We will never run out of things to program as long as there is a single program around.
-.
-.
-.
-.
-.
-.
-.
-.
-3. Syntactic sugar causes cancer of the semicolon.
-63. When we write programs that "learn", it turns out that we do and they don't.
-.
-.
-.
-.
-.
-.
-.
-.
-119. Programming is an unnatural act.
-63. When we write programs that "learn", it turns out that we do and they don't.
-.
-.
-.
-.
-.
-.
-.
-.
-63. When we write programs that "learn", it turns out that we do and they don't.
-8. A programming language is low level when its programs require attention to the irrelevant.
-.
-.
-.
-.
-.
-.
-.
-.
-8. A programming language is low level when its programs require attention to the irrelevant.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
+--- [Video room]
+before I provide you with a positive.
+Deckard: What's that going to prove?
+Tyrell: Indulge me.
+Deckard: On you?
+Tyrell: Try her.
+Deckard: It's too bright in here.
+[the window changes shade, letting less light in]
+Rachael: Do you mind if I smoke?
+through an electrical field. We lost the others. On the possibility
+they might try to infiltrate his employees, I had Holden go over and
+run Voight-Kampff tests on the new workers. Looks like he got himself
+one.
+Holden (video): So you look down you see a tortoise. It's crawling
+toward you.
+Leon (video): Tortoise, what's that?
+Holden (video): Know what a turtle is?
+Leon (video): Of course.
+Holden (video): Same thing.
+Leon (video): I've never seen a turtle.
+Deckard: I don't get it. What do they risk coming back to earth for?
+That's unusual. Why--what do they want from the Tyrell Corporation?
+Bryant: Well you tell me pal, that's what you're here for.
+Deckard: [funny look]. [pause] What's this?
+Bryant: Nexus 6. Roy Batty. Incept date 2016. Combat model. Optimum
+self-sufficiency. Probably the leader. This is Zhora. She's trained
+for an off-world kick-murder squad. Talk about beauty and the beast,
+she's both. The fourth skin job is Pris. A basic pleasure model. The
+standard item for military clubs in the outer colonies. They were
+Chew: J. -- J. F. Sebastian-- Sebas... Sebas...
+Roy: Now--where would we find this J. F. Sebastian?
+[In spinner, listening to Leon's video]
+Holden (video): Describe in single words, only the good things that
+come in to your mind about: your mother.
+Leon (video): My mother?
+Holden (video): Yeah.
+Leon (video): I'll tell you about my mother. (shot fired)
+**** is this right ****? [cut to overhead shot of city, zooms in on
+Deckard, reading a newspaper]
+Elevator: Voice print identification. Your floor number please.
+Deckard: Deckard, ninety-seven.
+Elevator: Ninety-seven, thank-you, danke.
+Rachael: I wanted to see you, (pause) so I waited. Let me help.
+Deckard: What do I need help for?
+Rachael: I don't know why he told you what he did.
+Deckard: Talk to him.
+Rachael: He wouldn't see me.
+Deckard: Do you want a drink? No? No?
+Rachael: You think I'm a replicant, don't you? (pause) Look, it's me
+with my mother.
+Deckard: Yeah. (pause) Remember when you were six? You and your
+were gonna play doctor. He showed you his, but when it got to be your
+turn you chickened and ran. Remember that? You ever tell anybody that?
+Your mother, Tyrell, anybody? You remember the spider that lived in a
+bush outside your window: orange body, green legs. Watched her build a
+Lady: Yeah what do you want?
+Deckard: Tsing tao. This enough?
+Lady: Yeah.
+Gaff: Bryant.
+Bryant: Christ, Deckard, you look almost as bad as that skin job you
+left on the sidewalk.
+Deckard: I'm going home.
+Bryant: You could learn from this guy Gaff. He's a god damn one man
+slaughter house. That's what he is. Four more to go. Come on Gaff,
+let's go.
+Deckard: Three. There's three to go.
+Bryant: There's four. That-- That skin job that you V-K'ed at the
+Tyrell Corporation, Rachael. Disappeared. Vanished. Didn't even know
+she was a replicant. Something to do with a brain implant says Tyrell.
+Come on Gaff. Drink some for me, pal.
+[Leon stops Deckard in the street]
+Deckard: Leon.
+Leon: How old am I?
+Deckard: I don't know.
+Leon: My birthday is April 10, 2017. How long do I live?
+Deckard: Four years.
+Leon: More than you. Painful to live in fear, isn't it? Nothing is
+worse than having an itch you can never scratch.
+Deckard: Oh, I agree.
+Leon: Wake up! Time to die.
+[Rachael pops some lead into Leon's cranium]
+[Back at Deckard apartment]
+Deckard: Shakes? Me too. I get 'em bad. It's part of the business.
+Rachael: I'm not in the business. I am the business.
+[Deckard gurgles blood.]
+Rachael: What if I go north. Disappear. Would you come after me? Hunt
+me?
+Deckard: No. No, I wouldn't. I owe you one. But somebody would.
+Rachael: Deckard? You know those files on me? The incept dates, the
+longevity, those things. You saw them?
+Deckard: They're classified.
+Rachael: But you're a policeman.
+Deckard: I didn't look at them.
+Rachael: You know that Voight-Kampf test of yours? Did you ever take
+that test yourself? Deckard?
+[Deckard falls asleep while Rachael dis-hairs and plays the piano.]
+Deckard: I dreamt music.
+Rachael: I didn't know if I could play. I remember lessons. I don't
+know if it's me or Tyrell's niece.
+Deckard: You play beautifully.
+[A little rough-housin']
+Deckard: Say kiss me.
+Rachael: I can't rely on.
+Deckard: Say kiss me.
+Rachael: Kiss me.
+Deckard: I want you.
+Rachael: I want you.
+Deckard: Again.
+Rachael: I want you. Put your hands on me.
+[Sebastian's apartment.]
+Sebastian: Whatcha doing?
+Pris: Sorry, just peaking.
+Sebastian: Oh.
+Pris: How do I look?
+Sebastian: You look better.
+Pris: Just better?
+Sebastian: Well, you look beautiful.
+Pris: Thanks. (pause) How old are you?
+Sebastian: Twenty-five.
+Pris: What's you problem?
+Sebastian: Methuselah's syndrome.
+Pris: What's that?
+Sebastian: My glands. They grow old too fast.
+Pris: Is that why you're still on earth?
+Sebastian: Yeah, I couldn't pass the medical. Anyway, I kind of like
+it here.
+Pris: I like you just the way you are. Hi Roy.
+Roy: Ah, gosh. You've really got some nice toys here.
+Pris: This is the friend I was telling you about. This is my savior J.
+F. Sebastian.
+Roy: Sebastian. I like a man that stays put. You live here all by
+yourself, do ya?
+Sebastian: Yes. (pause) How 'bout some breakfast. I was just gonna
+make some.
+Pris: Well?
+Roy: Leon--
+Pris: What's going on.
+Roy: Ah-- There's only two of us now.
+Pris: Then we're stupid and we'll die.
+Roy: No we won't.
+[Sebastian and Roy at chess board]
+Sebastian: No, knight takes queen, see. No good.
+Roy: Why are you staring at us Sebastian?
+Sebastian: Because. You're so different. You're so perfect.
+Roy: Yes.
+Sebastian: What generation are you?
+Roy: Nexus six.
+Sebastian: Ah, I knew it. 'Cause I do genetic design work for the
+Tyrell Corporation. There's some of me in you. Show me something.
+Roy: Like what?
+Sebastian: Like anything.
+Roy: We're not computers Sebastian, we're physical.
+Pris: I think, Sebastian, therefore I am.
+Roy: Very good Pris, now show him why.
+[Pris throws hot eggs at Sebastian]
+Roy: We've got a lot in common.
+Sebastian: What do you mean?
+Roy: Similar problems.
+Pris: Accelerated decrepitude.
+Sebastian: I don't know much about biomechanics, Roy, I wish I did.
+Roy: If we don't find help soon, Pris hasn't got long to live. We
+can't allow that. (pause) Is he good?
+Sebastian: Who?
+Deckard: Yes, ma'am. There's been some reports that the management has
+been taking liberties with the artists in this place.
+Zhora: I don't know nothing about it.
+Deckard: Have you felt yourself to be exploited in any way?
+Zhora: How do you mean, exploited?
+Deckard: Well, like to get this job. I mean, did you do, or-- or were
+you asked to do anything that was lewd or unsavory or otherwise, uh,
+repulsive to your person, huh?
+Zhora: Ha. Are you for real?
+Deckard: Oh yeah. I'd like to check your dressing room if I may.
+Zhora: For what?
+Deckard: For, uh, for holes.
+Zhora: Holes?
+Deckard: You'd be surprised what a guy'd go through to get a glimpse
+of a beautiful body.
+Zhora: No, I wouldn't.
+Deckard: Little, uh, dirty holes, uh, they drill in the wall so they
+can watch a lady undress. (pause) Is this a real snake?
+Zhora: Of course it's not real. Do you think I'd be working in a place
+like this if I could afford a real snake? (pause) So if somebody does
+try to exploit me, who do I go to about it?
+Deckard: Me.
+Zhora: You're a dedicated man.
+[Fight and chase]
+Hari Krishnas: Hari, Hari. Hari, Hari. Hari, Hari.
+Street Thing: Cross now... Don't walk...
+Deckard: Move! Get out of the way!
+[Deckard fires. Kills Zhora in dramatic slow motion scene.]
+Deckard (voice-over): The report would be routine retirement of a
+replicant which didn't make me feel any better about shooting a woman
+in the back. There it was again. Feeling, in myself. For her, for
+Rachael.
+Deckard: Deckard. B-263-54.
+Street thing: Move on...
+Lady: Yeah what do you want?
+Deckard: Tsing tao. This enough?
+Lady: Yeah.
+Gaff: Bryant.
+Bryant: Christ, Deckard, you look almost as bad as that skin job you
+left on the sidewalk.
+Deckard: I'm going home.
+Bryant: You could learn from this guy Gaff. He's a god damn one man
+slaughter house. That's what he is. Four more to go. Come on Gaff,
+let's go.
+Deckard: Three. There's three to go.
+Bryant: There's four. That-- That skin job that you V-K'ed at the
+Tyrell Corporation, Rachael. Disappeared. Vanished. Didn't even know
+she was a replicant. Something to do with a brain implant says Tyrell.
+Come on Gaff. Drink some for me, pal.
+[Leon stops Deckard in the street]
+Deckard: Leon.
+Leon: How old am I?
+Deckard: I don't know.
+Leon: My birthday is April 10, 2017. How long do I live?
+Deckard: Four years.
+Leon: More than you. Painful to live in fear, isn't it? Nothing is
+worse than having an itch you can never scratch.
+Deckard: Oh, I agree.
+Leon: Wake up! Time to die.
+[Rachael pops some lead into Leon's cranium]
+[Back at Deckard apartment]
+Deckard: Shakes? Me too. I get 'em bad. It's part of the business.
+Rachael: I'm not in the business. I am the business.
+[Deckard gurgles blood.]
+Rachael: What if I go north. Disappear. Would you come after me? Hunt
+me?
+Deckard: No. No, I wouldn't. I owe you one. But somebody would.
+Rachael: Deckard? You know those files on me? The incept dates, the
+longevity, those things. You saw them?
+Deckard: They're classified.
+Rachael: But you're a policeman.
+Deckard: I didn't look at them.
+Rachael: You know that Voight-Kampf test of yours? Did you ever take
+that test yourself? Deckard?
+[Deckard falls asleep while Rachael dis-hairs and plays the piano.]
+Deckard: I dreamt music.
+Rachael: I didn't know if I could play. I remember lessons. I don't
+know if it's me or Tyrell's niece.
+Deckard: You play beautifully.
+[A little rough-housin']
+Deckard: Say kiss me.
+Rachael: I can't rely on.
+Deckard: Say kiss me.
+Rachael: Kiss me.
+Deckard: I want you.
+Rachael: I want you.
+Deckard: Again.
+Rachael: I want you. Put your hands on me.
+[Sebastian's apartment.]
+Sebastian: Whatcha doing?
+Pris: Sorry, just peaking.
+Sebastian: Oh.
+Pris: How do I look?
+Sebastian: You look better.
+Pris: Just better?
+Sebastian: Well, you look beautiful.
+Pris: Thanks. (pause) How old are you?
+Sebastian: Twenty-five.
+Pris: What's you problem?
+Sebastian: Methuselah's syndrome.
+Pris: What's that?
+Sebastian: My glands. They grow old too fast.
+Pris: Is that why you're still on earth?
+Sebastian: Yeah, I couldn't pass the medical. Anyway, I kind of like
+it here.
+Pris: I like you just the way you are. Hi Roy.
+Roy: Ah, gosh. You've really got some nice toys here.
+Pris: This is the friend I was telling you about. This is my savior J.
+F. Sebastian.
+Roy: Sebastian. I like a man that stays put. You live here all by
+yourself, do ya?
+Sebastian: Yes. (pause) How 'bout some breakfast. I was just gonna
+make some.
+Pris: Well?
+Roy: Leon--
+Pris: What's going on.
+Roy: Ah-- There's only two of us now.
+Pris: Then we're stupid and we'll die.
+Roy: No we won't.
+[Sebastian and Roy at chess board]
+Sebastian: No, knight takes queen, see. No good.
+Roy: Why are you staring at us Sebastian?
+Sebastian: Because. You're so different. You're so perfect.
+Roy: Yes.
+Sebastian: What generation are you?
+Roy: Nexus six.
+Sebastian: Ah, I knew it. 'Cause I do genetic design work for the
+Tyrell Corporation. There's some of me in you. Show me something.
+Roy: Like what?
+Sebastian: Like anything.
+Roy: We're not computers Sebastian, we're physical.
+Pris: I think, Sebastian, therefore I am.
+Roy: Very good Pris, now show him why.
+[Pris throws hot eggs at Sebastian]
+Roy: We've got a lot in common.
+Sebastian: What do you mean?
+Roy: Similar problems.
+Pris: Accelerated decrepitude.
+Sebastian: I don't know much about biomechanics, Roy, I wish I did.
+Roy: If we don't find help soon, Pris hasn't got long to live. We
+can't allow that. (pause) Is he good?
+Sebastian: Who?
+Roy: Your opponent.
+Sebastian: Oh, Dr. Tyrell? I've only beaten him once in chess. He's a
+genius. He designed you.
+Roy: Maybe he could help.
+Tyrell: Because by the second day of incubation, any cells that have
+undergone reversion mutations give rise to revertant colonies like
+bush outside your window: orange body, green legs. Watched her build a
+web all summer. Then one day there was a big egg in it. The egg
+hatched--
+Rachael: The egg hatched, and a hundred baby spiders came out. And
+they ate her.
+Deckard: Implants! Those aren't your memories. They're somebody
+else's. They're Tyrell's niece's. (pause) Okay, bad joke. I made a bad
+joke. You're not a replicant. Go home, okay? No really, I'm sorry. Go
+home. (pause) Want a drink? I'll get you a drink.
+[Rachael runs away when Deckard turns to get a glass.]
+Deckard (voice-over): Tyrell really did a job on Rachael. Right down
+to a snapshot of a mother she never had, a daughter she never was.
+Replicants weren't supposed to have feelings. Neither were blade
+runners. What the hell was happening to me? Leon's pictures had to be
+as phony as Rachael's. I didn't know why a replicant would collect
+photos. Maybe they were like Rachael. They needed memories.
