@@ -52,7 +52,7 @@ void RB_delete_fixup(node **T_root, node *x);
 void empty_tree(node **T_root);
 //TREE mine
 void function_modify(node *iter_old_tree, int ind1, int ind2, node* my_new_root, FILE* fp);
-node* function_insert(int ind1, int ind2, node *my_new_root, FILE *fp);
+node* function_insert(int ind1, int ind2, tree *my_new_root, FILE *fp);
 void print_delta(node *T_root, int ind1, int ind2, FILE* out);
 int count_nodes(node *root);
 node *tree_search(node* x, int id);
@@ -153,11 +153,11 @@ int main(){
 
                 //modifica
                 if(tree_search(curr->root,ind1)!=nil)
-                    function_modify(curr->root,ind1,ind2,new_tree->root,fp);
+                    function_modify(curr->root,ind1,ind2,new_tree->root,fp); //maybe passo l'albero new_tree
 
                 //inserimento
                 else
-                    new_tree->root = function_insert(ind1,ind2,new_tree->root,fp);
+                    new_tree->root = function_insert(ind1,ind2,new_tree,fp);
 
                 in_order_walk(new_tree->root);
 
@@ -441,7 +441,8 @@ int main(){
 void function_modify(node *iter_old_tree, int ind1, int ind2, node* my_new_root, FILE* fp) {
 
     if(iter_old_tree == nil){
-        my_new_root = function_insert(ind1,ind2,my_new_root,fp);
+
+        //my_new_root = function_insert(ind1,ind2,my_new_root,fp);
         return;
     }
 
@@ -453,8 +454,10 @@ void function_modify(node *iter_old_tree, int ind1, int ind2, node* my_new_root,
             journey_copy->left = nil;
             journey_copy->right = nil;
             journey_copy->id = ind1;
-            //journey_copy->text = malloc((strlen("aaa") + 1) * sizeof(char));
-            //strcpy(journey_copy->text, "temp");
+            getline(&line,&len,fp);
+            line[strcspn(line,"\n\r")] = '\0';
+            journey_copy->text = malloc((strlen(line)+1) * sizeof(char));
+            strcpy(journey_copy->text,line);
         }
         else {
             journey_copy->left = iter_old_tree->left->left;
@@ -477,8 +480,10 @@ void function_modify(node *iter_old_tree, int ind1, int ind2, node* my_new_root,
             journey_copy->left = nil;
             journey_copy->right = nil;
             journey_copy->id = ind1;
-            //journey_copy->text = malloc((strlen("aaa") + 1) * sizeof(char));
-            //strcpy(journey_copy->text, "temp");
+            getline(&line,&len,fp);
+            line[strcspn(line,"\n\r")] = '\0';
+            journey_copy->text = malloc((strlen(line)+1) * sizeof(char));
+            strcpy(journey_copy->text,line);
         }
         else{
             journey_copy->left = iter_old_tree->right->left;
@@ -512,7 +517,7 @@ void function_modify(node *iter_old_tree, int ind1, int ind2, node* my_new_root,
 }
 
 
-node* function_insert(int ind1, int ind2, node *my_new_root, FILE *fp) {
+node* function_insert(int ind1, int ind2, tree *my_new_root, FILE *fp) {
 
     while(ind1!=ind2+1){
         node* new_node_to_insert = malloc(sizeof(node));
@@ -523,11 +528,11 @@ node* function_insert(int ind1, int ind2, node *my_new_root, FILE *fp) {
         //free(my_new_root->text);
         new_node_to_insert->text = malloc((strlen(line)+1) * sizeof(char));
         strcpy(new_node_to_insert->text, line);
-        RB_insert(&my_new_root,new_node_to_insert);
+        RB_insert(&my_new_root->root,new_node_to_insert);
         ind1++;
     }
 
-    return my_new_root;
+    return my_new_root->root;
 }
 
 
