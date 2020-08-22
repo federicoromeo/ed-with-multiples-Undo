@@ -485,11 +485,12 @@ void function_modify(node *iter_old_tree, int ind1, int ind2, node* my_new_root,
     else if(ind1 > iter_old_tree->id){
         node* journey_copy = malloc(sizeof(node));
         //if not exists the node , insert
-        if(iter_old_tree->right==nil){
+        if(iter_old_tree->right==nil){ //quando devo aggiungerlo sto nodo
             while(ind1!=ind2+1){
                 my_new_root = function_insert(ind1,ind2,my_new_tree,fp);
                 ind1++;
             }
+            return;
             /*journey_copy->left = nil;
             journey_copy->right = nil;
             journey_copy->id = ind1;
