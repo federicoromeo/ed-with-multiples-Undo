@@ -140,13 +140,13 @@ int main(){
                     exit(0);
                 }
                 new_tree->root = malloc(sizeof(node));
-                new_tree->nil = nil;
+                //new_tree->nil = nil;
                 if(curr->root!=nil){
                     new_tree->root->left = curr->root->left;
                     new_tree->root->right = curr->root->right;
                     new_tree->root->p = curr->root->p;
                     new_tree->root->id = curr->root->id;
-                    new_tree->root->text = malloc((strlen(line)+1)*sizeof(char));
+                    new_tree->root->text = malloc((strlen(curr->root->text)+1)*sizeof(char));
                     strcpy(new_tree->root->text, curr->root->text);
                 }
                 else{
