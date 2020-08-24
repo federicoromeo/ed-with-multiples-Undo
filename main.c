@@ -432,7 +432,7 @@ void function_delete(node *iter_old_tree, tree *old_tree, int ind1, int ind2, no
         if(iter_old_tree->left==nil){
             //todo
             while(ind1!=ind2+1){
-                my_new_root = function_insert(ind1,ind2,&my_new_tree->root,fp);
+                my_new_root = function_insert(ind1,ind2,my_new_tree->root,fp);
                 ind1++;
             }
         }
@@ -463,7 +463,7 @@ void function_delete(node *iter_old_tree, tree *old_tree, int ind1, int ind2, no
         //if not exists the node , insert
         if(iter_old_tree->right==nil){ //quando devo aggiungerlo sto nodo
             while(ind1!=ind2+1){
-                my_new_root = function_insert(ind1,ind2,my_new_tree,fp);
+                my_new_root = function_insert(ind1,ind2,my_new_tree->root,fp);
                 ind1++;
             }
             return;
@@ -897,7 +897,7 @@ void RB_insert(node **T_root, node *z) {
     z->left = nil;
     z->right = nil;
     z->color = 'r';
-    RB_insert_fixup(T_root, z);
+    //RB_insert_fixup(T_root, z);
 }
 
 void RB_insert_fixup(node **T_root, node *z) {
