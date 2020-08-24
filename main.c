@@ -2,15 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define fp stdin
-#define out stdout
+//#define fp stdin
+//#define out stdout
 
 struct node {
     char color;
     int id;
-    //char text[1024];
     char *text;
-    int is_a_copy;
     struct node *p;
     struct node *left;
     struct node *right;
@@ -18,6 +16,7 @@ struct node {
 typedef struct node node;
 
 node* nil;
+node* empty;
 
 struct tree {
     node *root;   //testa
@@ -53,18 +52,18 @@ void empty_tree(node **T_root);
 
 //TREE mine
 
-/*void function_modify(node *iter_old_tree, tree* old_tree, int ind1, int ind2, node* my_new_root, tree*, FILE* fp);
+void function_modify(node *iter_old_tree, tree* old_tree, int ind1, int ind2, node* my_new_root, tree*, FILE* fp);
 node* function_insert(int ind1, int ind2, node *my_new_root, FILE *fp);
 node* function_insert_1(int ind1, int ind2, node *my_new_root , FILE *fp);
 void function_delete(node *iter_old_tree, tree *old_tree, int ind1, int ind2, node *my_new_root, tree *my_new_tree, FILE *fp);
 void print_delta(node *T_root, int ind1, int ind2, FILE* out);
-void print_delta2(node *curr, int ind1, int ind2, FILE *fp);*/
-void function_modify(node *iter_old_tree, tree* old_tree, int ind1, int ind2, node* my_new_root, tree*);
+void print_delta2(node *curr, int ind1, int ind2, FILE *fp);
+/*void function_modify(node *iter_old_tree, tree* old_tree, int ind1, int ind2, node* my_new_root, tree*);
 node* function_insert(int ind1, int ind2, node *my_new_root);
 node* function_insert_1(int ind1, int ind2, node *my_new_root );
 void function_delete(node *iter_old_tree, tree *old_tree, int ind1, int ind2, node *my_new_root, tree *my_new_tree);
 void print_delta(node *T_root, int ind1, int ind2);
-void print_delta2(node *curr, int ind1, int ind2);
+void print_delta2(node *curr, int ind1, int ind2);*/
 
 int count_nodes(node *root);
 node *tree_search(node* x, int id);
@@ -79,25 +78,32 @@ int main(){
     //freopen("test.txt","r",stdin);  //todo levooooooooooooooooo
     //freopen("out.txt","r",stdout);  //todo levooooooooooooooooo
 
-
     int count = 1;
+
     // Creation of nil node
-    nil = (node*) malloc(sizeof(node));                  // sentinella
+    nil = malloc(sizeof(node));                  // sentinella
     nil->left = nil;
     nil->right = nil;
     nil->p = nil;
     nil->id = -1;
     nil->color = 'b';
 
+    empty = malloc(sizeof(node));                  // sentinella
+    empty->left = nil;
+    empty->right = nil;
+    empty->p = nil;
+    empty->id = -2;
+    empty->color = 'b';
+
     // Pointer at the current node of the linked list containing the roots of the successives modified trees
-    list_node* curr = (list_node*)malloc(sizeof(list_node));
-    curr->root = nil;
+    list_node* curr = malloc(sizeof(list_node));
+    curr->root = empty;
     curr->next = NULL;
     curr->prev = NULL;
 
     //for testing
-    //FILE *fp = fopen("C:/Users/feder/CLionProjects/ed-con-Undo-multipli/test.txt","r");
-    //FILE* out = fopen("out.txt","w");
+    FILE *fp = fopen("C:/Users/feder/CLionProjects/ed-con-Undo-multipli/test.txt","r");
+    FILE* out = fopen("out.txt","w");
     if(fp==NULL){
         printf("Error opening file");
         exit(0);
@@ -116,7 +122,6 @@ int main(){
     memcpy()*/
 
     //line = fgets(line,1024,fp);
-
     //line = malloc(1024);
     while(chars!=-1){
     //while(!feof(fp)) {
@@ -165,13 +170,14 @@ int main(){
 
                 old_tree->root = curr->root;
 
-                new_tree->root = malloc(sizeof(node));
                 //new_tree->nil = nil;
-                if(curr->root!=nil){
+                if(curr->root!=empty && curr->root!=nil){
+                    new_tree->root = malloc(sizeof(node));
                     new_tree->root->left = curr->root->left;
                     new_tree->root->right = curr->root->right;
                     new_tree->root->p = curr->root->p;
                     new_tree->root->id = curr->root->id;
+                    //SERENA  new_tree->root->text = curr->root->text;
                     new_tree->root->text = malloc((strlen(curr->root->text)+1)*sizeof(char));
                     strcpy(new_tree->root->text, curr->root->text);
                 }
@@ -184,17 +190,17 @@ int main(){
 
                 //modifica
                 if(tree_search(curr->root,ind1)!=nil)
-                    function_modify(curr->root,old_tree,ind1,ind2,new_tree->root,new_tree/*,fp*/);
-                    //function_modify(curr->root,old_tree,ind1,ind2,new_tree->root,new_tree,fp);
+                    //function_modify(curr->root,old_tree,ind1,ind2,new_tree->root,new_tree/*,fp*/);
+                    function_modify(curr->root,old_tree,ind1,ind2,new_tree->root,new_tree,fp);
 
                 //inserimento
                 else
-                    if(count==1 || num==0)
-                        new_tree->root = function_insert_1(ind1,ind2,new_tree->root/*,fp*/);
-                        //new_tree->root = function_insert_1(ind1,ind2,new_tree->root,fp);
+                    if(count==1 || num==0) //empty
+                        new_tree->root = function_insert_1(ind1,ind2,new_tree->root,fp);
+                        //new_tree->root = function_insert_1(ind1,ind2,new_tree->root/*,fp*/);
                     else
-                        function_modify(curr->root,old_tree,ind1,ind2,new_tree->root,new_tree/*,fp*/);
-                        //function_modify(curr->root,old_tree,ind1,ind2,new_tree->root,new_tree,fp);
+                        function_modify(curr->root,old_tree,ind1,ind2,new_tree->root,new_tree,fp);
+                        //function_modify(curr->root,old_tree,ind1,ind2,new_tree->root,new_tree/*,fp*/);
 
 
                 count++;
@@ -258,9 +264,9 @@ int main(){
                 if(curr->root!=nil){
                     while( i!=ind1 ){
                         node* to_be_copied = tree_search(curr->root,i);
-
                         node* x = malloc(sizeof(node));
                         x->id = to_be_copied->id;
+                        // SERENA   x->text = to_be_copied->text;
                         x->text = malloc((strlen(to_be_copied->text)+1)*sizeof(char));
                         strcpy(x->text,to_be_copied->text);
                         x->p = x->right = x->left = nil;
@@ -276,7 +282,8 @@ int main(){
                             break;
                         node* x = malloc(sizeof(node));
                         x->id = to_be_copied->id - delta;
-                        x->text = (char*)malloc((strlen(to_be_copied->text)+1)*sizeof(char));
+                        // SERENA       x->text = to_be_copied->text;
+                        x->text = malloc((strlen(to_be_copied->text)+1)*sizeof(char));
                         strcpy(x->text,to_be_copied->text);
                         x->p = x->right = x->left = nil;
                         RB_insert(&new_tree->root,x);
@@ -385,8 +392,8 @@ int main(){
                 //in_order_walk(tree->root);
 
                 //print_delta2(curr->root,ind1,ind2,out);
-                print_delta(curr->root,ind1,ind2/*,out*/);
-                //print_delta(curr->root,ind1,ind2,out);
+                //print_delta(curr->root,ind1,ind2/*,out*/);
+                print_delta(curr->root,ind1,ind2,out);
 
                 break;
             }
@@ -440,7 +447,7 @@ int main(){
 //IMPLEMENTATIONS
 
 
-void function_delete(node *iter_old_tree, tree *old_tree, int ind1, int ind2, node *my_new_root, tree *my_new_tree) {
+/*void function_delete(node *iter_old_tree, tree *old_tree, int ind1, int ind2, node *my_new_root, tree *my_new_tree) {
 //void function_delete(node *iter_old_tree, tree *old_tree, int ind1, int ind2, node *my_new_root, tree *my_new_tree, FILE *fp) {
 
     if(iter_old_tree == nil){
@@ -459,10 +466,10 @@ void function_delete(node *iter_old_tree, tree *old_tree, int ind1, int ind2, no
         }
         else {
             //se era gia una copia
-            /*if(tree_search(my_new_tree->root,iter_old_tree->left->id)->is_a_copy==1){
-                function_delete(iter_old_tree->left, old_tree, ind1, ind2, my_new_root->left,my_new_tree,fp);
-            }
-            else {*/
+            //if(tree_search(my_new_tree->root,iter_old_tree->left->id)->is_a_copy==1){
+            //    function_delete(iter_old_tree->left, old_tree, ind1, ind2, my_new_root->left,my_new_tree,fp);
+            //}
+            else {
                 node *journey_copy = malloc(sizeof(node));
                 journey_copy->left = iter_old_tree->left->left;
                 journey_copy->right = iter_old_tree->left->right;
@@ -532,12 +539,12 @@ void function_delete(node *iter_old_tree, tree *old_tree, int ind1, int ind2, no
     }
 
 }
-
+*/
 
 //iter_old_tree: testa albero vecchio
 //my_new_root: testa albero nuovo
-void function_modify(node *iter_old_tree, tree *old_tree, int ind1, int ind2, node* my_new_root, tree* my_new_tree) {
-//void function_modify(node *iter_old_tree, tree *old_tree, int ind1, int ind2, node* my_new_root, tree* my_new_tree, FILE* fp) {
+//void function_modify(node *iter_old_tree, tree *old_tree, int ind1, int ind2, node* my_new_root, tree* my_new_tree) {
+void function_modify(node *iter_old_tree, tree *old_tree, int ind1, int ind2, node* my_new_root, tree* my_new_tree, FILE* fp) {
 
     if(iter_old_tree == nil){
         //my_new_root = function_insert(ind1,ind2,my_new_root->p,fp);
@@ -546,12 +553,11 @@ void function_modify(node *iter_old_tree, tree *old_tree, int ind1, int ind2, no
 
     //target is on left, i have to copy the journey from here
     if(ind1 < iter_old_tree->id){
-        node* journey_copy = malloc(sizeof(node));
         //if not exists the node , insert
         if(iter_old_tree->left==nil){
             while(ind1!=ind2+1){
-                //my_new_tree->root = function_insert(ind1,ind2,my_new_tree->root,fp);
-                my_new_tree->root = function_insert(ind1,ind2,my_new_tree->root);
+                my_new_tree->root = function_insert(ind1,ind2,my_new_tree->root,fp);
+                //my_new_tree->root = function_insert(ind1,ind2,my_new_tree->root);
                 ind1++;
             }
             return;
@@ -565,17 +571,19 @@ void function_modify(node *iter_old_tree, tree *old_tree, int ind1, int ind2, no
                   RB_insert(&my_new_root,journey_copy);*/
         }
         else {
+            node* journey_copy = malloc(sizeof(node));
             journey_copy->left = iter_old_tree->left->left;
             journey_copy->right = iter_old_tree->left->right;
             journey_copy->id = iter_old_tree->left->id;
+            //SERENA        journey_copy->text = iter_old_tree->left->text;
             journey_copy->text = malloc((strlen(iter_old_tree->left->text) + 1) * sizeof(char));
             strcpy(journey_copy->text, iter_old_tree->left->text);
             journey_copy->p = my_new_root;
             my_new_root->left = journey_copy;
         }
 
-        function_modify(iter_old_tree->left,old_tree, ind1, ind2, my_new_root->left,my_new_tree);
-        //function_modify(iter_old_tree->left,old_tree, ind1, ind2, my_new_root->left,my_new_tree,fp);
+        //function_modify(iter_old_tree->left,old_tree, ind1, ind2, my_new_root->left,my_new_tree);
+        function_modify(iter_old_tree->left,old_tree, ind1, ind2, my_new_root->left,my_new_tree,fp);
     }
     //target is on right, i have to copy the journey from here
     else if(ind1 > iter_old_tree->id){
@@ -583,8 +591,8 @@ void function_modify(node *iter_old_tree, tree *old_tree, int ind1, int ind2, no
         if(iter_old_tree->right==nil) {
             /*if(tree_search(old_tree->root,ind1)==nil){ //quando devo aggiungerlo sto nodo*/
             while (ind1 != ind2 + 1) {
-                //my_new_tree->root = function_insert(ind1, ind2, my_new_tree->root, fp);
-                my_new_tree->root = function_insert(ind1, ind2, my_new_tree->root);
+                my_new_tree->root = function_insert(ind1, ind2, my_new_tree->root, fp);
+                //my_new_tree->root = function_insert(ind1, ind2, my_new_tree->root);
                 ind1++;
             }
             return;
@@ -622,12 +630,13 @@ void function_modify(node *iter_old_tree, tree *old_tree, int ind1, int ind2, no
                     journey_copy->left = iter_old_tree->right->left;
                     journey_copy->right = iter_old_tree->right->right;
                     journey_copy->id = iter_old_tree->right->id;
-                    journey_copy->text = malloc((strlen(iter_old_tree->right->text) + 1) * sizeof(char));
+                    journey_copy->text = iter_old_tree->right->text;
+                    // SERENA       journey_copy->text = malloc((strlen(iter_old_tree->right->text) + 1) * sizeof(char));
                     strcpy(journey_copy->text, iter_old_tree->right->text);
                     journey_copy->p = my_new_root;
                     my_new_root->right = journey_copy;
-                    //function_modify(iter_old_tree->right,old_tree, ind1, ind2, my_new_root->right,my_new_tree,fp);
-                    function_modify(iter_old_tree->right,old_tree, ind1, ind2, my_new_root->right,my_new_tree);
+                    function_modify(iter_old_tree->right,old_tree, ind1, ind2, my_new_root->right,my_new_tree,fp);
+                    //function_modify(iter_old_tree->right,old_tree, ind1, ind2, my_new_root->right,my_new_tree);
               /*  }
 
             }*/
@@ -644,7 +653,7 @@ void function_modify(node *iter_old_tree, tree *old_tree, int ind1, int ind2, no
 
         //ho trovato il primo da modificare
         ind1++;
-        //giusto ma insesce nodi a caso, mettono doppi padri
+        //giusto ma insesce nodi a caso, mettono doppi padri (fixato commentantdo rbfixup)
         if(ind1<=ind2){     //while(ind1<=ind2){
             node* next_one_old = in_order_successor(iter_old_tree);
             node* next_one_new = in_order_successor(my_new_root);
@@ -654,23 +663,37 @@ void function_modify(node *iter_old_tree, tree *old_tree, int ind1, int ind2, no
             }*/
 
             if(next_one_old==nil && next_one_new==nil){ //ma devo inserire
-                //function_modify(iter_old_tree,old_tree,ind1,ind2,my_new_root,my_new_tree,fp);
-                function_modify(iter_old_tree,old_tree,ind1,ind2,my_new_root,my_new_tree);
+                function_modify(iter_old_tree,old_tree,ind1,ind2,my_new_root,my_new_tree,fp);
+                //function_modify(iter_old_tree,old_tree,ind1,ind2,my_new_root,my_new_tree);
                 /*while (ind1 != ind2 + 1) {
                                    my_new_tree->root = function_insert(ind1, ind2, my_new_tree, fp);
                                    ind1++;
                                }*/
             }
+            else if(next_one_old==next_one_new){
+                node* journey_copy = malloc(sizeof(node));
+                journey_copy->left = next_one_old->left;
+                journey_copy->right = next_one_old->right;
+                journey_copy->id = next_one_old->id;
+                //SERENA        journey_copy->text = next_one_old->text;
+                journey_copy->text = malloc((strlen(next_one_old->text) + 1) * sizeof(char));
+                strcpy(journey_copy->text, next_one_old->text);
+                journey_copy->p = tree_search(my_new_tree->root,iter_old_tree->id);
+                tree_search(my_new_tree->root,iter_old_tree->id)->right = journey_copy;
+
+                next_one_new = in_order_successor(my_new_root);
+                function_modify(next_one_old,old_tree,ind1,ind2,next_one_new,my_new_tree,fp);
+            }
             else
-                function_modify(next_one_old,old_tree,ind1,ind2,next_one_new,my_new_tree);
-                //function_modify(next_one_old,old_tree,ind1,ind2,next_one_new,my_new_tree,fp);
+                //function_modify(next_one_old,old_tree,ind1,ind2,next_one_new,my_new_tree);
+                function_modify(next_one_old,old_tree,ind1,ind2,next_one_new,my_new_tree,fp);
         }
     }
 
 }
 
-node* function_insert_1(int ind1, int ind2, node *my_new_root) {
-//node* function_insert_1(int ind1, int ind2, node *my_new_root, FILE *fp) {
+//node* function_insert_1(int ind1, int ind2, node *my_new_root) {
+node* function_insert_1(int ind1, int ind2, node *my_new_root, FILE *fp) {
 
     while(ind1!=ind2+1){
         node* new_node_to_insert = malloc(sizeof(node));
@@ -687,8 +710,8 @@ node* function_insert_1(int ind1, int ind2, node *my_new_root) {
     return my_new_root;
 }
 
-node* function_insert(int ind1, int ind2, node *my_new_root) {
-//node* function_insert(int ind1, int ind2, node *my_new_root, FILE *fp) {
+//node* function_insert(int ind1, int ind2, node *my_new_root) {
+node* function_insert(int ind1, int ind2, node *my_new_root, FILE *fp) {
 
     node* new_node_to_insert = malloc(sizeof(node));
     new_node_to_insert->left = new_node_to_insert->right = new_node_to_insert->p = nil;
@@ -735,7 +758,7 @@ list_node* insert_in_list(node* tree_node_root, list_node* curr) {
     t->root = tree_node_root;
 
     // if it's empty
-    if (curr->root == nil) { //doubt
+    if (curr->root == empty) { //doubt
         curr = t;
         curr->next = NULL;
         curr->prev = NULL;
@@ -754,9 +777,8 @@ list_node* insert_in_list(node* tree_node_root, list_node* curr) {
     return t;
 }
 
-void print_delta(node *T_root, int ind1, int ind2){
-//void print_delta(node *T_root, int ind1, int ind2, FILE* out){
-//void print_delta(node *T_root, int ind1, int ind2, FILE* out){
+//void print_delta(node *T_root, int ind1, int ind2){
+void print_delta(node *T_root, int ind1, int ind2, FILE* out){
     while(ind1!=ind2+1) {
         if(tree_search(T_root, ind1)!=nil) {
             //printf("%s\n",tree_search(T_root, ind1)->text);
@@ -773,9 +795,8 @@ void print_delta(node *T_root, int ind1, int ind2){
     }
 }
 
-//void print_delta2(node *T_root, int ind1, int ind2/*, FILE* out*/) {
-void print_delta2(node *T_root, int ind1, int ind2){
-//void print_delta2(node *T_root, int ind1, int ind2, FILE* out){
+//void print_delta2(node *T_root, int ind1, int ind2){
+void print_delta2(node *T_root, int ind1, int ind2, FILE* out){
     node* print = tree_search(T_root, ind1);
     while (ind1 != ind2 + 1) {
         if (print != nil) {
