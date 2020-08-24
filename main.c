@@ -32,6 +32,8 @@ struct list_node {
 };
 typedef struct list_node list_node;
 
+list_node *first;
+
 char* line; size_t len = 0;
 
 
@@ -94,6 +96,8 @@ int main(){
     empty->p = nil;
     empty->id = -2;
     empty->color = 'b';
+
+    first = malloc(sizeof(list_node));
 
     // Pointer at the current node of the linked list containing the roots of the successives modified trees
     list_node* curr = malloc(sizeof(list_node));
@@ -408,7 +412,16 @@ int main(){
                     if(curr->prev!=NULL){
                         curr = curr->prev;
                     }
-                    else break;
+                    else {
+                        //create a copy of first node of list
+                        first->root = curr->root;
+                        first->next = curr->next;
+                        first->prev = curr->prev;
+                        curr->root = nil;
+                        curr->next = first;
+                        curr->prev = NULL;
+                        break;
+                    }
                     times--;
                 }
                 break;
@@ -419,12 +432,16 @@ int main(){
                 // Get the number of redo times by removing the last character (the command)
                 line[strlen(line)-1] = '\0';
                 times = (int) strtol(line, (char **)NULL, 10);                //times = atoi(line);
+                //int i = 1;
                 while(times>0){
+                    //if(i==1 /*&& curr->root!=empty*/)
+                        //curr = curr;
                     if(curr->next!=NULL){
                         curr = curr->next;
                     }
                     else break;
                     times--;
+                    //i=0;
                 }
                 break;
             }
