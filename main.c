@@ -7,7 +7,7 @@
 
 struct node {
     char color;
-    int id;
+    /*long long*/ int id;
     char *text;
     struct node *p;
     struct node *left;
@@ -81,7 +81,7 @@ int main(){
     //freopen("test.txt","r",stdin);  //todo levooooooooooooooooo
     //freopen("out.txt","r",stdout);  //todo levooooooooooooooooo
 
-    line = malloc(sizeof(len));
+    line = malloc(sizeof(1024));
     int count = 1;
 
     // Creation of nil node
@@ -464,7 +464,7 @@ int main(){
 
         }
 
-        memset(line, 0, strlen(line));
+        //memset(line, 0, strlen(line));
         chars = getline(&line,&len,fp);
     }
     fclose(fp);
@@ -678,7 +678,7 @@ void function_modify(node *iter_old_tree, tree *old_tree, int ind1, int ind2, no
         //i am on the target (my_new_root);
     else if(ind1 == iter_old_tree->id){
         //free(my_new_root->text);
-        memset(line, 0, strlen(line));
+        //memset(line, 0, strlen(line));
         getline(&line,&len,fp);
         line[strcspn(line,"\n\r")] = '\0';
         my_new_root->text = malloc((strlen(line)+1) * sizeof(char));
@@ -733,7 +733,7 @@ node* function_insert_1(int ind1, int ind2, node *my_new_root) {
         node* new_node_to_insert = malloc(sizeof(node));
         new_node_to_insert->left = new_node_to_insert->right = new_node_to_insert->p = nil;
         new_node_to_insert->id = ind1;
-        memset(line, 0, strlen(line));
+        //memset(line, 0, strlen(line));
         getline(&line,&len,fp);
         line[strcspn(line,"\n\r")] = '\0';
         new_node_to_insert->text = malloc((strlen(line)+1) * sizeof(char));
@@ -751,7 +751,7 @@ node* function_insert(int ind1, int ind2, node *my_new_root) {
     node* new_node_to_insert = malloc(sizeof(node));
     new_node_to_insert->left = new_node_to_insert->right = new_node_to_insert->p = nil;
     new_node_to_insert->id = ind1;
-    memset(line, 0, strlen(line));
+    //memset(line, 0, strlen(line));
     getline(&line,&len,fp);
     line[strcspn(line,"\n\r")] = '\0';
     new_node_to_insert->text = malloc((strlen(line)+1) * sizeof(char));
@@ -1008,7 +1008,7 @@ void RB_insert(node **T_root, node *z) {
     z->left = nil;
     z->right = nil;
     z->color = 'r';
-    //RB_insert_fixup(T_root, z);
+    RB_insert_fixup(T_root, z);
 }
 
 void RB_insert_fixup(node **T_root, node *z) {
@@ -1181,3 +1181,6 @@ void empty_tree(node **T_root) {
         RB_delete(T_root, *T_root);
     }
 }
+
+
+///////////////////////////////
