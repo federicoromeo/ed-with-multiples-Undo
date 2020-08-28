@@ -20,7 +20,6 @@ node* empty;
 
 struct tree {
     node *root;   //testa
-    //node *nil;
 };
 typedef struct tree tree;
 
@@ -45,14 +44,6 @@ struct list_write_only{
 typedef struct list_write_only list_write_only;
 
 list_write_only* last;
-
-struct text{
-    int pos;
-    char* text;
-    struct text* next;
-    struct text* prev;
-};
-typedef struct text text;
 
 
 size_t len = 0;
@@ -101,12 +92,6 @@ list_node* insert_in_list(node* tree_node_root, list_node* curr);
 list_write_only *insert_in_list_wo(list_write_only *new);
 
 
-//paoloavl
-struct node* insertElement(struct node *root, char *key, char *value);
-struct node* deleteElement(struct node *root, char *key);
-int existsElement(struct node *root, char *key);
-char* findElement(struct node *root, char *key);
-void printTree(struct node *root, FILE *fw);
 
 
 
@@ -122,7 +107,8 @@ int main(){
     nil->id = -1;
     nil->color = 'b';
 
-    empty = malloc(sizeof(node));                  // sentinella
+    // Creation of empty node just for the first move
+    empty = malloc(sizeof(node));
     empty->left = nil;
     empty->right = nil;
     empty->p = nil;
@@ -135,20 +121,14 @@ int main(){
     curr->next = NULL;
     curr->prev = NULL;
 
+    // Pointer to the list node number 0, used when i undo every action
     zero = malloc(sizeof(list_node));
     zero->next = curr;
     zero->prev = NULL;
 
+    // Pointer to the last node in writeOnly case
     last = NULL;
-    //first_copy = malloc(sizeof(list_write_only));
-    //last = malloc(sizeof(list_write_only));
-    //last->next = NULL;
-    //last->command_line = NULL;
-    //last->text_lines = NULL;
 
-    text* text_ptr = NULL;
-
-    //for testing
     //fp = fopen("C:/Users/feder/CLionProjects/ed-con-Undo-multipli/test.txt","r");
     //out = fopen("out.txt","w");
     if(fp==NULL){
@@ -157,20 +137,15 @@ int main(){
     }
 
 
-
+    int write_only = 1;
     int ind1=0, ind2=0, times=0;
     char command;
-
-    int write_only = 1;
-
-
-    // HANDLING WRITE ONLY
-
     char* command_line;
     int chars = getline(&line,&len,fp), w=0;
     int length = 0;
     line[strcspn(line, "\n\r")] = '\0';
 
+    // HERE I SAVE EVERY COMMAND GIVEN
     while(chars!=-1){
 
         command = line[strlen(line)-1];
@@ -189,26 +164,18 @@ int main(){
                 splitted_line = strtok(NULL, ",");
                 i++;
             }
-            ind1 = ind[0];
-            ind2 = ind[1];
-            new->ind1 = ind1;
-            new->ind2 = ind2;
+            new->ind1 = ind[0];
+            new->ind2 = ind[1];
 
-            int pos = 0;
-            for(i=ind1; i<=ind2; i++){
+            for(i=new->ind1; i<=new->ind2; i++){
                 getline(&line,&len,fp);
                 length++;
                 /* then i will use strtok('\n') to split */    //line[strcspn(line, "\n\r")] = '\0';
-                int b = strlen(line);
-                int c = strlen(new->text_lines);
-                int a = b+c;
                 new->text_lines = realloc(new->text_lines,strlen(line)+1+strlen(new->text_lines)+1);
-                int d = strlen(new->text_lines);
-                if(new->text_lines==NULL) puts("ERROR REALLOC!");
+                //if(new->text_lines==NULL) puts("ERROR REALLOC!");
                 strcat(new->text_lines,line);
                 //strcpy(new->text_lines,line);
                 new->next = NULL;
-                pos++;
             }
             last = insert_in_list_wo(new);
             chars = getline(&line,&len,fp);
@@ -227,14 +194,32 @@ int main(){
                 splitted_line = strtok(NULL, ",");
                 i++;
             }
-            ind1 = ind[0];
-            ind2 = ind[1];
-            new->ind1 = ind1;
-            new->ind2 = ind2;
+            new->ind1 = ind[0];
+            new->ind2 = ind[1];
             new->text_lines = NULL;
 
             last = insert_in_list_wo(new);
+        }
+        else if(command=='d'){
+            write_only = 0;
+            list_write_only* new = malloc(sizeof(list_write_only));
+            new->command_line = malloc((strlen(line)+1)*sizeof(char));
+            strcpy(new->command_line,line);
+            //new->text_lines = malloc(sizeof(char));
+            //strcpy(new->text_lines,"");
+            //get addresses
+            int ind[2] = {0, 0}, i = 0;
+            char *splitted_line = strtok(line, ",");
+            while (splitted_line != NULL) {
+                ind[i] = (int) strtol(splitted_line, (char **) NULL, 10);
+                splitted_line = strtok(NULL, ",");
+                i++;
+            }
+            new->ind1 = ind[0];
+            new->ind2 = ind[1];
+            new->text_lines = NULL;
 
+            last = insert_in_list_wo(new);
         }
         else if(command=='q') {
             list_write_only* new = malloc(sizeof(list_write_only));
@@ -243,29 +228,31 @@ int main(){
 
             last = insert_in_list_wo(new);
         }
-        else write_only = 0;
+        else if(command=='u' || command=='r'){
+            write_only = 0;
+            list_write_only* new = malloc(sizeof(list_write_only));
+            new->command_line = malloc((strlen(line)+1)*sizeof(char));
+            strcpy(new->command_line,line);
 
+            last = insert_in_list_wo(new);
+        }
 
         chars = getline(&line,&len,fp);
         line[strcspn(line, "\n\r")] = '\0';
     }
 
 
-    // handling of write only
     char** texttt = malloc(length*sizeof(char*));
     int max_ind = 0;
 
+    // HANDLING WRITE ONLY
     if(write_only==1){
 
-        /*list_write_only* first_copy_copy = malloc(sizeof(list_write_only));
-        first_copy_copy->next = first_copy->next;
-        first_copy_copy->prev = first_copy->prev;
-        first_copy_copy->text_lines = first_copy->text_lines;
-        first_copy_copy->command_line = first_copy->command_line;*/
         list_write_only* current = NULL;
         list_write_only* temp = last;
+        //current will point to the first node where i have all the commands saved
         while(temp->prev!=NULL) {
-            current = temp->prev; //current points to the first
+            current = temp->prev;
             temp = temp->prev;
         }
         command = current->command_line[strlen(current->command_line)-1];
@@ -318,41 +305,53 @@ int main(){
                     break;
             }
 
-            if (current->next != NULL)
+            if (current->next != NULL) //redundant
                 current = current->next;
             command = current->command_line[strlen(current->command_line) - 1];
         }
-        exit(0);
+        exit(0); //redundant
     }
 
-    /*while(first_copy->next!=NULL){
-        if(first_copy->command_line[strlen(first_copy->command_line)-1]!='c'){
-            write_only = 0;
-            break;
+    else{
+
+        list_write_only* current = NULL;
+        list_write_only* temp = last;
+        //current will point to the first node where i have all the commands saved
+        while(temp->prev!=NULL) {
+            current = temp->prev;
+            temp = temp->prev;
         }
-        first_copy = first_copy->next;
-    }*/
+        command = current->command_line[strlen(current->command_line)-1];
+
+        while(1) {
+            switch (command) {
+
+                case 'c': {
+
+                }
+
+                case 'p': {
 
 
+                }
 
+                case 'q': {
+                    exit(0);
+                }
 
+                default:
+                    break;
+            }
 
+            if (current->next != NULL) //redundant
+                current = current->next;
+            command = current->command_line[strlen(current->command_line) - 1];
+        }
+        exit(0); //redundant
+    }
 
-
-
-    /*fseek(stdin, 0, SEEK_END);      // seek to end of file
-    int file_size = ftell(stdin);   // get current file pointer
-    fseek(stdin, 0, SEEK_SET);      // seek back to beginning of file
-    // proceed with allocating memory and reading the file
-    memcpy()*/
-
-    //line = fgets(line,1024,fp);
-    //line = malloc(1024);
+    
     while(chars!=-1){
-        //while(!feof(fp)) {
-        //while(fgets(line,1024,fp)){
-        //fgets(line,1024,fp);
-        //la ho gia     line = strtok(line,"\n");
         line[strcspn(line, "\n\r")] = '\0';
         command = line[strlen(line)-1];
 
@@ -534,7 +533,7 @@ int main(){
                 break;
             }
 
-                /*case 'd':{
+            /*case 'd':{
                 //while in order succ   id--
 
                     int ind[2]={0,0}, i=0;
@@ -679,7 +678,6 @@ int main(){
 
         }
 
-        //memset(line, 0, strlen(line));
         chars = getline(&line,&len,fp);
     }
     fclose(fp);
@@ -688,6 +686,10 @@ int main(){
 }
 
 
+
+
+
+//IMPLEMENTATIONS
 
 list_write_only *insert_in_list_wo(list_write_only *new) {
 
@@ -707,9 +709,6 @@ list_write_only *insert_in_list_wo(list_write_only *new) {
 
     return new;
 }
-
-
-//IMPLEMENTATIONS
 
 
 /*void function_delete(node *iter_old_tree, tree *old_tree, int ind1, int ind2, node *my_new_root, tree *my_new_tree) {
@@ -1568,161 +1567,3 @@ void right_rotate(struct node **root,struct node *y){
 }
 
 
-
-
-/////////////////////////////// avl
-/*#define BFACTOR 2
-int heightNode(struct node *root){
-    return root ? root->height : 0;
-}
-int maxi(int a, int b){
-    return a > b ? a : b;
-}
-void fixHeightNode(struct node *root){
-    if(root) root->height = maxi(heightNode(root->left), heightNode(root->right)) + 1;
-}
-int bfactor(struct node* root){
-    return root == nil ? 0: heightNode(root->right)-heightNode(root->left);
-}
-struct node* rightRotation(struct node *x){
-    //printf("inizio Nodo girato sinistra %s\n", x->key);
-
-    struct node *tmp = x->left;
-    //if(tmp == NULL) printf("NULLLLLL\n");
-    //printf("%d met Nodo girato sinistra\n", *(int *)tmp->value);
-    struct node *t2 = tmp->right;
-
-    tmp->right = x;
-    x->left = t2;
-
-    fixHeightNode(x);
-    fixHeightNode(tmp);
-    //printf("%d Nodo girato sinistra\n", *(int *)tmp->value);
-
-    return tmp;
-}
-struct node* leftRotation(struct node *x){
-    //printf("inizio Nodo girato destra %s\n", x->key);
-
-    struct node *tmp = x->right;
-    //if(tmp == NULL) printf("NULLLLLL\n");
-
-    struct node *t2 = tmp->left;
-
-    tmp->left = x;
-    x->right = t2;
-
-    fixHeightNode(x);
-    fixHeightNode(tmp);
-    //printf("%d Nodo girato destra\n", *(int *)tmp->value);
-
-    return tmp;
-}
-struct node* balance(struct node *root){
-    fixHeightNode(root);
-    int bfact = bfactor(root);
-    if(bfact <= -BFACTOR){
-        if(bfactor(root->left) >= 1)
-            root->left = leftRotation(root->left);
-        root = rightRotation(root);
-    }
-    if(bfact >= BFACTOR){
-        if(bfactor(root->right) <= -1)
-            root->right = rightRotation(root->right);
-        root = leftRotation(root);
-    }
-    //printf("Nodo bilanciato %d\n", bfact);
-    return root;
-}
-struct node* insertElement(struct node *root, struct node* x){
-    if(root == nil){
-        root = malloc(sizeof(*root));
-        if(root == nil) printf("out of memory\n");
-        root = x;
-        root->height = 1;
-        root->left = root->right = nil;
-        return root;
-    }
-
-    int result = x->id - root->id;
-
-    if(result < 0){
-        root->left = insertElement(root->left,x);
-        root = balance(root);
-    }else if(result > 0){
-        root->right = insertElement(root->right,x);
-        root = balance(root);
-    }else{
-        //free(root->text);
-        root->text = malloc(strlen(x->text)+1);  //?
-        strcpy(root->text, x->text);
-    }
-    return root;
-}
-struct node* minNode;
-struct node* findMin(struct node *root){
-    if(root->left)
-        return balance(root->left = findMin(root->left));
-    else{
-        minNode = root;
-        return root->right;
-    }
-}*/
-/*struct node* deleteElement(struct node *root, char *key){
-    if(root == NULL)
-        return root;
-
-    int result = strcmp(key, root->key);
-    if(result < 0)
-        root->left = deleteElement(root->left, key);
-    else if(result > 0)
-        root->right = deleteElement(root->right, key);
-    else{
-        if(root->left == NULL){
-            struct node *tmp = root->right;
-            free(root);
-            root = tmp;
-        }else if(root->right == NULL){
-            struct node *tmp = root->left;
-            free(root);
-            root = tmp;
-        }else{
-            root->right = findMin(root->right);
-            root->key = minNode->key;
-            root->value = minNode->value;
-            free(minNode);
-        }
-    }
-    return balance(root);
-}*/
-/*
-int existsElement(struct node *root, int id){
-    if(root == nil)
-        return 0;
-    int result = id - root->id;
-    if(result < 0)
-        return existsElement(root->left, id);
-    else if(result > 0)
-        return existsElement(root->right, id);
-    else
-        return 1;
-}
-char* findElement(struct node *root, int id){
-    if(root == nil)
-        return NULL;
-    int result = id - root->id;
-    if(result < 0)
-        return findElement(root->left, id);
-    else if(result > 0)
-        return findElement(root->right, id);
-    else
-        return root->text;
-}
-
-void printTree(struct node *root, FILE *fw){
-    if(root == NULL)
-        return;
-    printTree(root->left, fw);
-    fprintf(fw, "a %d %s\n", root->id, root->text);
-    printTree(root->right, fw);
-}*/
