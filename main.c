@@ -8,7 +8,6 @@
 struct node {
     char color;
     int id;
-    int height;
     char *text;
     struct node *p;
     struct node *left;
@@ -35,10 +34,33 @@ typedef struct list_node list_node;
 
 list_node *zero;
 
+
+struct list_write_only{
+    int ind1,ind2;
+    char* command_line;
+    char* text_lines;
+    struct list_write_only* next;
+    struct list_write_only* prev;
+};
+typedef struct list_write_only list_write_only;
+
+list_write_only* last;
+
+struct text{
+    int pos;
+    char* text;
+    struct text* next;
+    struct text* prev;
+};
+typedef struct text text;
+
+
 size_t len = 0;
 char *line;
 
 
+//FILE *fp;
+//FILE* out;
 //PROTOTYPES
 
 void in_order_walk(node *T_root);
@@ -73,8 +95,10 @@ int count_nodes(node *root);
 node *tree_search(node* x, int id);
 void print2DUtil(node *root, int space);
 struct node* in_order_successor(node* n);
+
 //LINKED LIST
 list_node* insert_in_list(node* tree_node_root, list_node* curr);
+list_write_only *insert_in_list_wo(list_write_only *new);
 
 
 //paoloavl
@@ -85,11 +109,9 @@ char* findElement(struct node *root, char *key);
 void printTree(struct node *root, FILE *fw);
 
 
-int main(){
-    //freopen("test.txt","r",stdin);  //todo levooooooooooooooooo
-    //freopen("out.txt","r",stdout);  //todo levooooooooooooooooo
 
-    //line = malloc(sizeof(1024));
+int main(){
+
     int count = 1;
 
     // Creation of nil node
@@ -117,19 +139,205 @@ int main(){
     zero->next = curr;
     zero->prev = NULL;
 
+    last = NULL;
+    //first_copy = malloc(sizeof(list_write_only));
+    //last = malloc(sizeof(list_write_only));
+    //last->next = NULL;
+    //last->command_line = NULL;
+    //last->text_lines = NULL;
+
+    text* text_ptr = NULL;
 
     //for testing
-    //FILE *fp = fopen("C:/Users/feder/CLionProjects/ed-con-Undo-multipli/test.txt","r");
-    //FILE* out = fopen("out.txt","w");
+    //fp = fopen("C:/Users/feder/CLionProjects/ed-con-Undo-multipli/test.txt","r");
+    //out = fopen("out.txt","w");
     if(fp==NULL){
         printf("Error opening file");
         exit(0);
     }
 
 
+
     int ind1=0, ind2=0, times=0;
     char command;
-    int chars = getline(&line,&len,fp);
+
+    int write_only = 1;
+
+
+    // HANDLING WRITE ONLY
+
+    char* command_line;
+    int chars = getline(&line,&len,fp), w=0;
+    int length = 0;
+    line[strcspn(line, "\n\r")] = '\0';
+
+    while(chars!=-1){
+
+        command = line[strlen(line)-1];
+
+        if(command=='c'){
+            list_write_only* new = malloc(sizeof(list_write_only));
+            new->command_line = malloc((strlen(line)+1)*sizeof(char));
+            strcpy(new->command_line,line);
+            new->text_lines = malloc(sizeof(char));
+            strcpy(new->text_lines,"");
+            //get addresses
+            int ind[2] = {0, 0}, i = 0;
+            char *splitted_line = strtok(line, ",");
+            while (splitted_line != NULL) {
+                ind[i] = (int) strtol(splitted_line, (char **) NULL, 10);
+                splitted_line = strtok(NULL, ",");
+                i++;
+            }
+            ind1 = ind[0];
+            ind2 = ind[1];
+            new->ind1 = ind1;
+            new->ind2 = ind2;
+
+            int pos = 0;
+            for(i=ind1; i<=ind2; i++){
+                getline(&line,&len,fp);
+                length++;
+                /* then i will use strtok('\n') to split */    //line[strcspn(line, "\n\r")] = '\0';
+                int b = strlen(line);
+                int c = strlen(new->text_lines);
+                int a = b+c;
+                new->text_lines = realloc(new->text_lines,strlen(line)+1+strlen(new->text_lines)+1);
+                int d = strlen(new->text_lines);
+                if(new->text_lines==NULL) puts("ERROR REALLOC!");
+                strcat(new->text_lines,line);
+                //strcpy(new->text_lines,line);
+                new->next = NULL;
+                pos++;
+            }
+            last = insert_in_list_wo(new);
+            chars = getline(&line,&len,fp);
+        }
+        else if(command=='p'){
+            list_write_only* new = malloc(sizeof(list_write_only));
+            new->command_line = malloc((strlen(line)+1)*sizeof(char));
+            strcpy(new->command_line,line);
+            //new->text_lines = malloc(sizeof(char));
+            //strcpy(new->text_lines,"");
+            //get addresses
+            int ind[2] = {0, 0}, i = 0;
+            char *splitted_line = strtok(line, ",");
+            while (splitted_line != NULL) {
+                ind[i] = (int) strtol(splitted_line, (char **) NULL, 10);
+                splitted_line = strtok(NULL, ",");
+                i++;
+            }
+            ind1 = ind[0];
+            ind2 = ind[1];
+            new->ind1 = ind1;
+            new->ind2 = ind2;
+            new->text_lines = NULL;
+
+            last = insert_in_list_wo(new);
+
+        }
+        else if(command=='q') {
+            list_write_only* new = malloc(sizeof(list_write_only));
+            new->command_line = malloc((strlen(line)+1)*sizeof(char));
+            strcpy(new->command_line,line);
+
+            last = insert_in_list_wo(new);
+        }
+        else write_only = 0;
+
+
+        chars = getline(&line,&len,fp);
+        line[strcspn(line, "\n\r")] = '\0';
+    }
+
+
+    // handling of write only
+    char** texttt = malloc(length*sizeof(char*));
+    int max_ind = 0;
+
+    if(write_only==1){
+
+        /*list_write_only* first_copy_copy = malloc(sizeof(list_write_only));
+        first_copy_copy->next = first_copy->next;
+        first_copy_copy->prev = first_copy->prev;
+        first_copy_copy->text_lines = first_copy->text_lines;
+        first_copy_copy->command_line = first_copy->command_line;*/
+        list_write_only* current = NULL;
+        list_write_only* temp = last;
+        while(temp->prev!=NULL) {
+            current = temp->prev; //current points to the first
+            temp = temp->prev;
+        }
+        command = current->command_line[strlen(current->command_line)-1];
+
+        while(1) {
+            switch (command) {
+
+                case 'c': {
+
+                    int pos = current->ind1;
+                    char *splitted_text = strtok(current->text_lines, "\n");
+                    while (splitted_text != NULL) {
+                        texttt[pos - 1] = malloc((strlen(splitted_text) + 1) * sizeof(char));
+                        texttt[pos - 1] = splitted_text;
+                        texttt[pos] = NULL;
+                        splitted_text = strtok(NULL, "\n");
+                        pos++;
+                    }
+                    max_ind = current->ind2;
+                    break;
+                }
+
+                case 'p': {
+
+                    if(current->ind1==0 && current->ind2==0){
+                        fputs(".\n", out);
+                        break;
+                    }
+                    if(current->ind1==0) current->ind1++;
+                    for (int j = current->ind1; j <= current->ind2; j++) {
+                        if (current->ind1>max_ind || texttt[j - 1] == NULL) {
+                            while (j <= current->ind2) {
+                                fputs(".\n", out);
+                                j++;
+                            }
+                        }
+                        else {
+                            fputs(texttt[j - 1], out);
+                            fputs("\n", out);
+                        }
+                    }
+                    break;
+                }
+
+                case 'q': {
+                    exit(0);
+                }
+
+                default:
+                    break;
+            }
+
+            if (current->next != NULL)
+                current = current->next;
+            command = current->command_line[strlen(current->command_line) - 1];
+        }
+        exit(0);
+    }
+
+    /*while(first_copy->next!=NULL){
+        if(first_copy->command_line[strlen(first_copy->command_line)-1]!='c'){
+            write_only = 0;
+            break;
+        }
+        first_copy = first_copy->next;
+    }*/
+
+
+
+
+
+
 
 
     /*fseek(stdin, 0, SEEK_END);      // seek to end of file
@@ -149,7 +357,6 @@ int main(){
         command = line[strlen(line)-1];
 
         switch(command){
-
 
             case 'q':{
                 exit(0);
@@ -482,6 +689,24 @@ int main(){
 
 
 
+list_write_only *insert_in_list_wo(list_write_only *new) {
+
+    if(last==NULL){ //empty, insert as first node
+        last = new;
+        new->prev = NULL;
+        new->next = NULL;
+        return new;
+    }
+
+    while(last->next!=NULL)
+        last = last->next;
+
+    last->next = new;
+    new->prev = last;
+    new->next = NULL;
+
+    return new;
+}
 
 
 //IMPLEMENTATIONS
@@ -581,8 +806,6 @@ int main(){
 }
 */
 
-//iter_old_tree: testa albero vecchio
-//my_new_root: testa albero nuovo
 void function_modify(node *iter_old_tree, tree *old_tree, int ind1, int ind2, node* my_new_root, tree* my_new_tree) {
 //void function_modify(node *iter_old_tree, tree *old_tree, int ind1, int ind2, node* my_new_root, tree* my_new_tree, FILE* fp) {
 
@@ -733,7 +956,6 @@ void function_modify(node *iter_old_tree, tree *old_tree, int ind1, int ind2, no
     }
 
 }
-
 node* function_insert_1(int ind1, int ind2, node *my_new_root) {
 //node* function_insert_1(int ind1, int ind2, node *my_new_root, FILE *fp) {
 
@@ -752,7 +974,6 @@ node* function_insert_1(int ind1, int ind2, node *my_new_root) {
 
     return my_new_root;
 }
-
 node* function_insert(int ind1, int ind2, node *my_new_root) {
 //node* function_insert(int ind1, int ind2, node *my_new_root, FILE *fp) {
 
@@ -769,7 +990,6 @@ node* function_insert(int ind1, int ind2, node *my_new_root) {
     return my_new_root;
 }
 
-
 struct node* in_order_successor(node* n){
     if (n->right != nil)
         return RB_minimum(n->right);
@@ -781,7 +1001,6 @@ struct node* in_order_successor(node* n){
     }
     return p;
 }
-
 struct node* in_order_predecessor(node* n){
     // ?
     if (n->left != nil)
@@ -824,7 +1043,6 @@ list_node* insert_in_list(node* tree_node_root, list_node* curr) {
 
     return t; //the last node
 }
-
 void print_delta(node *T_root, int ind1, int ind2){
 //void print_delta(node *T_root, int ind1, int ind2, FILE* out){
     while(ind1!=ind2+1) {
@@ -843,7 +1061,6 @@ void print_delta(node *T_root, int ind1, int ind2){
         }
     }
 }
-
 void print_delta2(node *T_root, int ind1, int ind2){
 //void print_delta2(node *T_root, int ind1, int ind2, FILE* out){
     node* print = tree_search(T_root, ind1);
@@ -862,9 +1079,6 @@ void print_delta2(node *T_root, int ind1, int ind2){
         print = in_order_successor(print);
     }
 }
-
-// Function to print binary tree in 2D
-// It does reverse inorder traversal
 void print2DUtil(node *root, int space) {
     // Base case
     if (root == nil)
@@ -886,7 +1100,6 @@ void print2DUtil(node *root, int space) {
     // Process left child
     print2DUtil(root->left, space);
 }
-
 void in_order_walk(node *T_root) {
     if (T_root != nil && T_root->id>0) {
         in_order_walk(T_root->left);
@@ -901,8 +1114,6 @@ void in_order_walk(node *T_root) {
         in_order_walk(T_root->right);
     }
 }
-
-// Search a node with that id
 node *tree_search(node* x, int id){
     if(x==nil || id==x->id ){      //se non c'e oppure � proprio lui
         return x;
@@ -916,7 +1127,6 @@ node *tree_search(node* x, int id){
         }
     }
 }
-
 int count_nodes(node *root) {
     int count = 1;
     if (root->left != nil) {
@@ -1361,7 +1571,7 @@ void right_rotate(struct node **root,struct node *y){
 
 
 /////////////////////////////// avl
-#define BFACTOR 2
+/*#define BFACTOR 2
 int heightNode(struct node *root){
     return root ? root->height : 0;
 }
@@ -1457,7 +1667,7 @@ struct node* findMin(struct node *root){
         minNode = root;
         return root->right;
     }
-}
+}*/
 /*struct node* deleteElement(struct node *root, char *key){
     if(root == NULL)
         return root;
@@ -1485,6 +1695,7 @@ struct node* findMin(struct node *root){
     }
     return balance(root);
 }*/
+/*
 int existsElement(struct node *root, int id){
     if(root == nil)
         return 0;
@@ -1514,4 +1725,4 @@ void printTree(struct node *root, FILE *fw){
     printTree(root->left, fw);
     fprintf(fw, "a %d %s\n", root->id, root->text);
     printTree(root->right, fw);
-}
+}*/
