@@ -7,7 +7,8 @@
 
 struct node {
     char color;
-    /*long long*/ int id;
+    int id;
+    int height;
     char *text;
     struct node *p;
     struct node *left;
@@ -76,12 +77,19 @@ struct node* in_order_successor(node* n);
 list_node* insert_in_list(node* tree_node_root, list_node* curr);
 
 
+//paoloavl
+struct node* insertElement(struct node *root, char *key, char *value);
+struct node* deleteElement(struct node *root, char *key);
+int existsElement(struct node *root, char *key);
+char* findElement(struct node *root, char *key);
+void printTree(struct node *root, FILE *fw);
+
 
 int main(){
     //freopen("test.txt","r",stdin);  //todo levooooooooooooooooo
     //freopen("out.txt","r",stdout);  //todo levooooooooooooooooo
 
-    line = malloc(sizeof(1024));
+    //line = malloc(sizeof(1024));
     int count = 1;
 
     // Creation of nil node
@@ -820,6 +828,7 @@ list_node* insert_in_list(node* tree_node_root, list_node* curr) {
 void print_delta(node *T_root, int ind1, int ind2){
 //void print_delta(node *T_root, int ind1, int ind2, FILE* out){
     while(ind1!=ind2+1) {
+        //fixme: inorder
         if(tree_search(T_root, ind1)!=nil) {
             //printf("%s\n",tree_search(T_root, ind1)->text);
             //puts(tree_search(T_root, ind1)->text);
@@ -939,7 +948,8 @@ node *node_search(node *T_root, char *k) {
     }
 }*/
 
-void left_rotate(node **T_root, node *x) {
+//OLD
+/*void left_rotate(node **T_root, node *x) {
     if ((**T_root).p == nil && x->right != nil) {
         node *y = x->right;
         x->right = y->left;
@@ -959,9 +969,8 @@ void left_rotate(node **T_root, node *x) {
         y->left = x;
         x->p = y;
     }
-}
-
-void right_rotate(node **T_root, node *x) {
+}*/
+/*void right_rotate(node **T_root, node *x) {
     if ((**T_root).p == nil && x->left != nil) {
         node *y = x->left;
         x->left = y->right;
@@ -981,10 +990,9 @@ void right_rotate(node **T_root, node *x) {
         y->right = x;
         x->p = y;
     }
-}
-
-void RB_insert(node **T_root, node *z) {
-    node *y = nil;
+}*/
+//void RB_insert(node **T_root, node *z) {
+/*    node *y = nil;
     node *x = *T_root;
     while (x != nil) {
         y = x;
@@ -1009,10 +1017,9 @@ void RB_insert(node **T_root, node *z) {
     z->right = nil;
     z->color = 'r';
     RB_insert_fixup(T_root, z);
-}
-
-void RB_insert_fixup(node **T_root, node *z) {
-    while (z->p->color == 'r') {
+}*/
+//void RB_insert_fixup(node **T_root, node *z) {
+/*    while (z->p->color == 'r') {
         if (z->p == z->p->p->left) {
             node *y = z->p->p->right;
             if (y->color == 'r') {
@@ -1051,8 +1058,7 @@ void RB_insert_fixup(node **T_root, node *z) {
         }
     }
     (*T_root)->color = 'b';
-}
-
+}*/
 void RB_transplant(node **T_root, node *u, node *v) {
     if (u->p == nil) {
         *T_root = v;
@@ -1065,21 +1071,18 @@ void RB_transplant(node **T_root, node *u, node *v) {
     }
     v->p = u->p;
 }
-
 node *RB_minimum(node *T_root) {
     while(T_root->left != nil) {
         T_root = T_root->left;
     }
     return T_root;
 }
-
 node *RB_maximum(node *T_root) {
     while(T_root->right != nil) {
         T_root = T_root->right;
     }
     return T_root;
 }
-
 void RB_delete(node **T_root, node *z) {
     if (*T_root != nil) {
         node *x;
@@ -1117,7 +1120,6 @@ void RB_delete(node **T_root, node *z) {
         free(y);
     }
 }
-
 void RB_delete_fixup(node **T_root, node *x) {
     while (x != *T_root && x->color == 'b') {
         if (x == x->p->left) {
@@ -1175,7 +1177,6 @@ void RB_delete_fixup(node **T_root, node *x) {
     }
     x->color = 'b';
 }
-
 void empty_tree(node **T_root) {
     while (*T_root != nil) {
         RB_delete(T_root, *T_root);
@@ -1183,4 +1184,334 @@ void empty_tree(node **T_root) {
 }
 
 
-///////////////////////////////
+//NEW: almost working
+void tree_print(struct node *x){
+    if(x != nil){
+        tree_print(x->left);
+        fputs(x->text, out);
+        tree_print(x->right);
+    }
+}
+void RB_insert(struct node **root, struct node* z){
+
+        //if root is null make z as root
+        if (*root == nil){
+            z->color = 'b';
+            (*root) = z;
+        }
+        else{
+            struct node *y = nil;
+            struct node *x = (*root);
+
+            // Follow standard BST insert steps to first insert the node
+            while (x != nil) {
+                y = x;
+                if (z->id < x->id)
+                    x = x->left;
+                else
+                    x = x->right;
+            }
+            z->p = y;
+            if (z->id > y->id)
+                y->right = z;
+            else
+                y->left = z;
+            z->color = 'r';
+
+            RB_insert_fixup(root,z);
+        }
+}
+void RB_insert_fixup(struct node **root,struct node *z){
+    // iterate until z is not the root and z's parent color is red
+    while (z != *root && z->p->color == 'r')
+    {
+        struct node *y;
+
+        // Find uncle and store uncle in y
+        if (z->p == z->p->p->left)
+            y = z->p->p->right;
+        else
+            y = z->p->p->left;
+
+        // If uncle is RED, do following
+        // (i)  Change color of p and uncle as BLACK
+        // (ii) Change color of grandp as RED
+        // (iii) Move z to grandp
+        if (y->color == 'r')
+        {
+            y->color = 'b';
+            z->p->color = 'b';
+            z->p->p->color = 'r';
+            z = z->p->p;
+        }
+
+            // Uncle is BLACK, there are four cases (LL, LR, RL and RR)
+        else
+        {
+            // Left-Left (LL) case, do following
+            // (i)  Swap color of p and grandp
+            // (ii) Right Rotate Grandp
+            if (z->p == z->p->p->left &&
+                z == z->p->left)
+            {
+                char ch = z->p->color ;
+                z->p->color = z->p->p->color;
+                z->p->p->color = ch;
+                right_rotate(root,z->p->p);
+            }
+
+            // Left-Right (LR) case, do following
+            // (i)  Swap color of current node  and grandp
+            // (ii) Left Rotate p
+            // (iii) Right Rotate Grand p
+            if (z->p == z->p->p->left &&
+                z == z->p->right)
+            {
+                char ch = z->color ;
+                z->color = z->p->p->color;
+                z->p->p->color = ch;
+                left_rotate(root,z->p);
+                right_rotate(root,z->p->p);
+            }
+
+            // Right-Right (RR) case, do following
+            // (i)  Swap color of p and grandp
+            // (ii) Left Rotate Grandp
+            if (z->p == z->p->p->right &&
+                z == z->p->right)
+            {
+                char ch = z->p->color ;
+                z->p->color = z->p->p->color;
+                z->p->p->color = ch;
+                left_rotate(root,z->p->p);
+            }
+
+            // Right-Left (RL) case, do following
+            // (i)  Swap color of current node  and grandp
+            // (ii) Right Rotate p
+            // (iii) Left Rotate Grand p
+            if (z->p == z->p->p->right &&
+                z == z->p->left)
+            {
+                char ch = z->color ;
+                z->color = z->p->p->color;
+                z->p->p->color = ch;
+                right_rotate(root,z->p);
+                left_rotate(root,z->p->p);
+            }
+        }
+    }
+    (*root)->color = 'b'; //keep root always black
+}
+void left_rotate(struct node **root,struct node *x){
+    //y stored pointer of right child of x
+    struct node *y = x->right;
+
+    //store y's left subtree's pointer as x's right child
+    x->right = y->left;
+
+    //update parent pointer of x's right
+    if (x->right != nil)
+        x->right->p = x;
+
+    //update y's parent pointer
+    y->p = x->p;
+
+    // if x's parent is null make y as root of tree
+    if (x->p == nil)
+        (*root) = y;
+
+        // store y at the place of x
+    else if (x == x->p->left)
+        x->p->left = y;
+    else    x->p->right = y;
+
+    // make x as left child of y
+    y->left = x;
+
+    //update parent pointer of x
+    x->p = y;
+}       /*
+ * Lets say y is x's left child. Right rotate x by making x, y's right child and y
+ * x's parent. y's right child becomes x's left child.
+ *
+ *			|											|
+ *			x											y
+ *		   / \										   / \
+ *		  y   STA		---------------->			STB	  x
+ *		 / \											 / \
+ *	  STB   STC										  STC   STA
+ */
+void right_rotate(struct node **root,struct node *y){
+    struct node *x = y->left;
+    y->left = x->right;
+    if (x->right != nil)
+        x->right->p = y;
+    x->p =y->p;
+    if (x->p == nil)
+        (*root) = x;
+    else if (y == y->p->left)
+        y->p->left = x;
+    else y->p->right = x;
+    x->right = y;
+    y->p = x;
+}
+
+
+
+
+/////////////////////////////// avl
+#define BFACTOR 2
+int heightNode(struct node *root){
+    return root ? root->height : 0;
+}
+int maxi(int a, int b){
+    return a > b ? a : b;
+}
+void fixHeightNode(struct node *root){
+    if(root) root->height = maxi(heightNode(root->left), heightNode(root->right)) + 1;
+}
+int bfactor(struct node* root){
+    return root == nil ? 0: heightNode(root->right)-heightNode(root->left);
+}
+struct node* rightRotation(struct node *x){
+    //printf("inizio Nodo girato sinistra %s\n", x->key);
+
+    struct node *tmp = x->left;
+    //if(tmp == NULL) printf("NULLLLLL\n");
+    //printf("%d met Nodo girato sinistra\n", *(int *)tmp->value);
+    struct node *t2 = tmp->right;
+
+    tmp->right = x;
+    x->left = t2;
+
+    fixHeightNode(x);
+    fixHeightNode(tmp);
+    //printf("%d Nodo girato sinistra\n", *(int *)tmp->value);
+
+    return tmp;
+}
+struct node* leftRotation(struct node *x){
+    //printf("inizio Nodo girato destra %s\n", x->key);
+
+    struct node *tmp = x->right;
+    //if(tmp == NULL) printf("NULLLLLL\n");
+
+    struct node *t2 = tmp->left;
+
+    tmp->left = x;
+    x->right = t2;
+
+    fixHeightNode(x);
+    fixHeightNode(tmp);
+    //printf("%d Nodo girato destra\n", *(int *)tmp->value);
+
+    return tmp;
+}
+struct node* balance(struct node *root){
+    fixHeightNode(root);
+    int bfact = bfactor(root);
+    if(bfact <= -BFACTOR){
+        if(bfactor(root->left) >= 1)
+            root->left = leftRotation(root->left);
+        root = rightRotation(root);
+    }
+    if(bfact >= BFACTOR){
+        if(bfactor(root->right) <= -1)
+            root->right = rightRotation(root->right);
+        root = leftRotation(root);
+    }
+    //printf("Nodo bilanciato %d\n", bfact);
+    return root;
+}
+struct node* insertElement(struct node *root, struct node* x){
+    if(root == nil){
+        root = malloc(sizeof(*root));
+        if(root == nil) printf("out of memory\n");
+        root = x;
+        root->height = 1;
+        root->left = root->right = nil;
+        return root;
+    }
+
+    int result = x->id - root->id;
+
+    if(result < 0){
+        root->left = insertElement(root->left,x);
+        root = balance(root);
+    }else if(result > 0){
+        root->right = insertElement(root->right,x);
+        root = balance(root);
+    }else{
+        //free(root->text);
+        root->text = malloc(strlen(x->text)+1);  //?
+        strcpy(root->text, x->text);
+    }
+    return root;
+}
+struct node* minNode;
+struct node* findMin(struct node *root){
+    if(root->left)
+        return balance(root->left = findMin(root->left));
+    else{
+        minNode = root;
+        return root->right;
+    }
+}
+/*struct node* deleteElement(struct node *root, char *key){
+    if(root == NULL)
+        return root;
+
+    int result = strcmp(key, root->key);
+    if(result < 0)
+        root->left = deleteElement(root->left, key);
+    else if(result > 0)
+        root->right = deleteElement(root->right, key);
+    else{
+        if(root->left == NULL){
+            struct node *tmp = root->right;
+            free(root);
+            root = tmp;
+        }else if(root->right == NULL){
+            struct node *tmp = root->left;
+            free(root);
+            root = tmp;
+        }else{
+            root->right = findMin(root->right);
+            root->key = minNode->key;
+            root->value = minNode->value;
+            free(minNode);
+        }
+    }
+    return balance(root);
+}*/
+int existsElement(struct node *root, int id){
+    if(root == nil)
+        return 0;
+    int result = id - root->id;
+    if(result < 0)
+        return existsElement(root->left, id);
+    else if(result > 0)
+        return existsElement(root->right, id);
+    else
+        return 1;
+}
+char* findElement(struct node *root, int id){
+    if(root == nil)
+        return NULL;
+    int result = id - root->id;
+    if(result < 0)
+        return findElement(root->left, id);
+    else if(result > 0)
+        return findElement(root->right, id);
+    else
+        return root->text;
+}
+
+void printTree(struct node *root, FILE *fw){
+    if(root == NULL)
+        return;
+    printTree(root->left, fw);
+    fprintf(fw, "a %d %s\n", root->id, root->text);
+    printTree(root->right, fw);
+}
