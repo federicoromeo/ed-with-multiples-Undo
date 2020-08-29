@@ -89,6 +89,8 @@ node *tree_search(node* x, int id);
 void print2DUtil(node *root, int space);
 struct node* in_order_successor(node* n);
 
+char* mystrcat( char* dest, char* src );
+
 //LINKED LIST
 list_node* insert_in_list(node* tree_node_root, list_node* curr);
 list_write_only *insert_in_list_wo(list_write_only *new);
@@ -171,17 +173,38 @@ int main(){
             }
             prev_ind2 = new->ind2;
 
+            //char* p = malloc(1); //aux to concat efficiently
+            //p[0] = '\0';
+            //new->text_lines[0] = '\0';
             for(i=new->ind1; i<=new->ind2; i++){
                 getline(&line,&len,fp);
                 length++;
                 /* then i will use strtok('\n') to split */    //line[strcspn(line, "\n\r")] = '\0';
-                new->text_lines = realloc(new->text_lines,strlen(line)+1+strlen(new->text_lines)+1);
+                //new->text_lines = realloc(new->text_lines,strlen(line)+1+strlen(new->text_lines)+1);
+                //p = realloc(p,strlen(line)+1+strlen(p)+1);
                 //if(new->text_lines==NULL) puts("ERROR REALLOC!");
-                strcat(new->text_lines,line);
-                //strcpy(new->text_lines,line);
-                new->next = NULL;
 
+
+                size_t firstLen = strlen( new->text_lines );
+                size_t secondLen = strlen( line );
+                new->text_lines = realloc(new->text_lines, secondLen + firstLen + 1);
+                strcpy(new->text_lines + firstLen, line);
+
+
+
+                /*
+                char *tmp = malloc( strlen(new->text_lines) + strlen(line) + 1);
+                strcpy(tmp, new->text_lines);
+                strcpy(tmp + strlen(new->text_lines), line);
+                */
+
+                //p = mystrcat(p,line);
+                //1 strcat(new->text_lines,line);
+
+                //strcpy(new->text_lines,line);
             }
+
+            new->next = NULL;
             last = insert_in_list_wo(new);
             chars = getline(&line,&len,fp);
         }
@@ -530,7 +553,8 @@ int main(){
                     while (times > 0) {
                         if (curr->prev != NULL) {
                             curr = curr->prev;
-                        } else {
+                        }
+                        else {
                             zero->root = nil;
                             curr->prev = zero;
                             zero->next = curr;
@@ -956,6 +980,14 @@ list_write_only *insert_in_list_wo(list_write_only *new) {
 }
 */
 
+char* mystrcat( char* dest, char* src ){
+    while (*dest) dest++;
+
+
+    /*while (*dest) dest++;
+    while (*dest++ = *src++);
+    return --dest;*/
+}
 void function_modify(node *iter_old_tree, tree *old_tree, int ind1, list_write_only* current, int ind2, node* my_new_root, tree* my_new_tree) {
 //void function_modify(node *iter_old_tree, tree *old_tree, int ind1, int ind2, node* my_new_root, tree* my_new_tree, FILE* fp) {
 
@@ -1169,7 +1201,6 @@ struct node* in_order_predecessor(node* n){
     return p;
 }
 
-//return the last list_node node
 list_node* insert_in_list(node* tree_node_root, list_node* curr) {
 
     list_node *t = malloc(sizeof(list_node));
@@ -1199,13 +1230,16 @@ list_node* insert_in_list(node* tree_node_root, list_node* curr) {
     return t; //the last node
 }
 void print_delta(node *T_root, int ind1, int ind2){
-//void print_delta(node *T_root, int ind1, int ind2, FILE* out){
+
+    node* to_print = tree_search(T_root, ind1);
+    //void print_delta(node *T_root, int ind1, int ind2, FILE* out){
+
     while(ind1!=ind2+1) {
         //fixme: inorder
-        if(tree_search(T_root, ind1)!=nil) {
+        if(to_print!=nil) {
             //printf("%s\n",tree_search(T_root, ind1)->text);
             //puts(tree_search(T_root, ind1)->text);
-            fputs(tree_search(T_root, ind1)->text,out);
+            fputs(to_print->text,out);
             fputs("\n",out);
             ind1++;
         }
@@ -1214,6 +1248,7 @@ void print_delta(node *T_root, int ind1, int ind2){
             fputs(".\n",out);
             ind1++;
         }
+        to_print = in_order_successor(to_print);
     }
 }
 void print_delta2(node *T_root, int ind1, int ind2){
