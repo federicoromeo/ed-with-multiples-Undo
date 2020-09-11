@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 struct node {
     char color;
     int id;
@@ -14,7 +13,7 @@ struct node {
 typedef struct node node;
 
 struct tree {
-    node *root;   //testa
+    node *root;
 };
 typedef struct tree tree;
 
@@ -23,10 +22,7 @@ node* empty;
 
 
 struct list_node {
-    //int id;
     node* root;
-    //struct list_node* prev;
-    //struct list_node* next;
 };
 typedef struct list_node list_node;
 
@@ -46,12 +42,10 @@ typedef struct list_write_only list_write_only;
 
 list_write_only* last;
 
-//FILE *fp, *out;
 
 size_t len = 0;
 char *line;
 char** texttt;
-
 //FILE *fp, *out;
 
 
@@ -62,11 +56,11 @@ void in_order_walk(node *T_root);
 void left_rotate(node **T_root, node *x);
 void right_rotate(node **T_root, node *x);
 void RB_insert(node **T_root, node *z);
-//void RB_insert_fixup(node **T_root, node *z);
+  //void RB_insert_fixup(node **T_root, node *z);
 void RB_transplant(node **T_root, node *u, node *v);
 node *RB_minimum(node *T_root);
 void RB_delete(node **T_root, node *z);
-//void RB_delete_fixup(node **T_root, node *x);
+  //void RB_delete_fixup(node **T_root, node *x);
 int count_nodes(node *root);
 node *tree_search(node* x, int id);
 struct node* in_order_successor(node* n);
@@ -76,7 +70,6 @@ node* function_insert(int ind1, int ind2, list_write_only* current, node *my_new
 node* function_insert_1(int ind1, int ind2, list_write_only* current, node *my_new_root);
 void print_delta(node *T_root, int ind1, int ind2);
 // Linked List
-//list_node* insert_in_list(node* tree_node_root, list_node* curr);
 list_write_only *insert_in_list_wo(list_write_only *new);
 list_node* insert_in_list_array(list_node **, int ,node* tree_node_root);
 
@@ -106,17 +99,14 @@ int main(){
     // Pointer at the current node of the linked list containing the roots of the successives modified trees
     list_node* curr = malloc(sizeof(list_node));
     curr->root = empty;
-    //curr->next = NULL;
-    //curr->prev = NULL;
-    //fixme: ALTERNATIVA DINAMIC ARRAY FOR undo
+
+    // Pointer to the current node of curr
     list_node** array = NULL;
 
     // Pointer to the list node number 0, used when i undo every action
     last_index = 0;
     zero = malloc(sizeof(list_node));
     zero->root = nil;
-    //zero->next = curr;
-    //zero->prev = NULL;
 
     // Pointer to the last node in writeOnly case
     last = NULL;
@@ -301,10 +291,9 @@ int main(){
 
         array = (list_node**)malloc(sizeof(list_node*)*stati);
 
-        //array = malloc(100000);
-
         list_write_only* current = NULL;
         list_write_only* temp = last;
+
         //current will point to the first node where i have all the commands saved
         while(temp->prev!=NULL) {
             current = temp->prev;
@@ -369,8 +358,7 @@ int main(){
 
                     count++;
 
-                    //curr = insert_in_list(new_tree->root,curr);
-
+                    // List handling
                     curr = insert_in_list_array(array,moves,new_tree->root);
                     last_index = moves;
 
@@ -437,9 +425,6 @@ int main(){
                     }
 
                     // List handling
-
-                    //curr = insert_in_list(new_tree->root,curr);
-
                     curr = insert_in_list_array(array,moves,new_tree->root);
                     last_index = moves;
 
@@ -461,154 +446,18 @@ int main(){
                     break;
                 }
 
-                //accorpamento
-                /*
-                case 'r':
-                case 'u':{
-
-                    moves = 1;
-                    list_node* cont_prev = malloc(sizeof(list_node));
-                    cont_prev->prev = curr->prev;
-                    cont_prev->next = curr->next;
-                    cont_prev->root = curr->root;
-                    list_node* cont_next = malloc(sizeof(list_node));
-                    cont_next->prev = curr->prev;
-                    cont_next->next = curr->next;
-                    cont_next->root = curr->root;
-                    while(cont_prev->prev != NULL) {
-                        moves++;
-                        cont_prev = cont_prev->prev;
-                    }
-                    while(cont_next->next != NULL) {
-                        moves++;
-                        cont_next = cont_next->next;
-                    }
-                    int times = current->ind1;
-                    if(current->command=='r'){
-                        if(current->prev->command=='p') {
-                            times *= -1;
-                            if(times<old_times) times=old_times;
-                        }
-                        else {
-                            times = 0;
-                            times = min(times, moves);
-                        }
-                    }
-                    else
-                        times = min(times, moves);
-
-
-                    //todo : UNISCO
-                    char next_command = current->next->command;
-                    while(next_command=='u' || next_command=='r'){
-
-                        current = current->next;
-
-                        switch(next_command){
-
-                            case 'u':{
-                                times += current->ind1;
-                                times = min(times,moves);
-                                break;
-                            }
-
-                            case 'r':{
-                                times -= current->ind1;
-                                //times = min(times,0);
-                                times = max(times,0);
-                                break;
-                            }
-
-                        }
-                        next_command = current->next->command;
-                    }
-
-
-                    old_times = times;
-
-                    while (times != 0) {
-
-                        //UNDO
-                        if(times>0){
-                            if (curr->prev != NULL)
-                                curr = curr->prev;
-                            else {
-                                zero->root = nil;
-                                curr->prev = zero;
-                                zero->next = curr;
-                                zero->prev = curr->prev;
-                                curr = zero;
-                                break;
-                            }
-                        }
-                        //REDO
-                        else
-                            if (curr->next != NULL)
-                                curr = curr->next;
-                            else break;
-
-
-                        times>0 ? times-- : times++;
-                    }
-
-                    //moves=0;
-
-                    break;
-                }
-                 */
-
-                //old
-                /*
                 case 'u':{
 
                     int times = current->ind1;
 
-                    while (times > 0) {
-                        if (curr->prev != NULL) {
-                            curr = curr->prev;
-                        }
-                        else {
-                            zero->root = nil;
-                            curr->prev = zero;
-                            zero->next = curr;
-                            zero->prev = curr->prev;
-                            curr = zero;
-                            break;
-                        }
-                        times--;
-                    }
-
-                    break;
-                }
-
-                case 'r':{
-
-                    int times = current->ind1;
-
-                    while (times > 0) {
-                        if (curr->next != NULL) {
-                            curr = curr->next;
-                        }
-                        else break;
-                        times--;
-                    }
-                    break;
-                }
-                */
-
-                //new with dynamic array
-                case 'u':{
-
-                    int times = current->ind1;
-
-                    //moves: massime undo che posso fare, se le eccedo vado a: zero
+                    //moves: max undo that i can do
                     if(times>moves){
                         curr = zero;
                         moves = 0;
                     }
                     else {
-                        int old_pos = moves; //1
-                        while (array[old_pos - 1] != curr) {
+                        int old_pos = moves;
+                        while (array[old_pos - 1] != curr) { //unuseful
                             old_pos++;
                         }
                         int new_pos = old_pos - times;
@@ -617,10 +466,9 @@ int main(){
                             moves = new_pos;
                         }
                         else{
-                            curr = zero;//array[0];
+                            curr = zero;
                             moves = 0;
                         }
-                        //array[old_pos-times] = NULL; solo dopo una change
                     }
 
                     break;
@@ -629,9 +477,9 @@ int main(){
                 case 'r':{
 
                     int times = current->ind1;
-                    //moves: massime undo che posso fare, se le eccedo vado a
+                    //moves: max undo that i can do
 
-                    int old_pos = 1;  //qui c'è l'indice corrente[-1]
+                    int old_pos = 1;  //current index
 
                     if(curr==zero){
                         curr = array[0];
@@ -645,18 +493,11 @@ int main(){
                     }
 
 
-                    //capisco quanti redo posso fare (doubt su null)
+                    //availables_redo : max redo that i can do
                     int a = old_pos, availables_redo = last_index-old_pos;
-                    /*while(array[a-1]!=NULL){
-                        availables_redo++;
-                        a++;
-                    }
-                    availables_redo--;*/
-                    //array[availables_redo] = NULL; //cosi elimino quelli dopo
-                    //printf("redo: %d\n",availables_redo);
 
                     int new_pos = old_pos + times;
-                    if(times > availables_redo){ //eccedo le redo
+                    if(times > availables_redo){ //exceed redos
                         curr = array[old_pos + availables_redo - 1];
                         moves = old_pos + availables_redo;
                     }
@@ -759,7 +600,7 @@ void RB_insert(node **T_root, node *z) {
     z->color = 'r';
     //RB_insert_fixup(T_root, z);
 }
-void RB_insert_fixup(node **T_root, node *z) {
+/*void RB_insert_fixup(node **T_root, node *z) {
     while (z->p->color == 'r') {
         if (z->p == z->p->p->left) {
             node *y = z->p->p->right;
@@ -799,7 +640,7 @@ void RB_insert_fixup(node **T_root, node *z) {
         }
     }
     (*T_root)->color = 'b';
-}
+}*/
 void RB_transplant(node **T_root, node *u, node *v) {
     if (u->p == nil) {
         *T_root = v;
@@ -1121,24 +962,6 @@ list_write_only *insert_in_list_wo(list_write_only *new) {
 
     return new;
 }
-/*list_node* insert_in_list(node* tree_node_root, list_node* curr) {
-
-    list_node *t = malloc(sizeof(list_node));
-    t->root = tree_node_root;
-
-    if (curr->root == empty) {    //empty
-        curr = t;
-        curr->next = NULL;
-        curr->prev = NULL;
-        return t;
-    }
-
-    curr->next = t;
-    t->prev = curr;
-    t->next = NULL;
-
-    return t; //the last node
-}*/
 list_node* insert_in_list_array(list_node** array, int pos, node* tree_node_root) {
 
     array[pos-1] = (list_node*)malloc(sizeof(list_node));
